@@ -2,7 +2,7 @@
 
 | Student's name | SCIPER |
 | -------------- | ------ |
-| Bagoj Mitrevski | 295003 |
+| Blagoj Mitrevski | 295003 |
 | Martin Milenkoski | 295000 |
 | Mladen Korunoski | 309531 |
 
