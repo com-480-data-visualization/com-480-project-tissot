@@ -92,6 +92,8 @@ These results are strong enough to point us to a conclusion that there is gender
 
 ### 1.4 Related work
 
+- In this interesting [kaggle kernel](https://www.kaggle.com/gsdeepakkumar/movie-mania-exploring-the-movie-database) we found various visualizations exploring this dataset. The kernel includes visualizations about popularity of the movies, most common keywords, correlations between popularity and revenue, etc. But it lacks any visualizations about the gender of the actors or crew of the movies.
+
 - One interesting source of inspiration is [this](https://www.theatlantic.com/business/archive/2018/01/the-brutal-math-of-gender-inequality-in-hollywood/550232/) article where the writer says “Hollywood remains an industry where women are more likely to be celebrated for speaking out in front of a camera than for holding one”. They also used an interesting plot to visualize their findings, but we believe a more graphic and interactive article would have a bigger impact and better address the issue of gender inequality.
 
 
