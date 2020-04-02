@@ -92,6 +92,8 @@ These results are strong enough to point us to a conclusion that there is gender
 
 ### 1.4 Related work
 
+- One interesting source of inspiration is [this](https://www.theatlantic.com/business/archive/2018/01/the-brutal-math-of-gender-inequality-in-hollywood/550232/) article where the writer says “Hollywood remains an industry where women are more likely to be celebrated for speaking out in front of a camera than for holding one”. They also used an interesting plot to visualize their findings, but we believe a more graphic and interactive article would have a bigger impact and better address the issue of gender inequality.
+
 
 
 ## Milestone 2 (Friday 1st May, 5pm)
