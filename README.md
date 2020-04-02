@@ -41,6 +41,54 @@ Apart from gender equality, we plan to also explore the other dimensions of the 
 
 
 ### 1.3 Exploratory Data Analysis
+The dataset contains metadata for 4 803 movies, and metadata for the actors and the crew of the movies. For the actors, there is metadata for a total of 48 291 male actors, and 24 168 female actors. Similarly, for the crew there is metadata for a total of 43 000 male crew personnel, and 11 764 female personnel. We created a few plots to get more insight in the data, and see if there is enough information to answer our questions.
+
+This word cloud plot is a visual representation of the movie genres in our dataset. The most common movie genres are comedy, drama, thriller, action, etc.
+
+
+<p align="center">
+  <img src="img/wordcloud_genre.png" alt="drawing" width="600"/>
+</p>
+
+From these two plots we can see the ten most popular movies, and the gender representation in these movies. As we can see from the second plot, in all the movies there are more actors than actresses.
+
+<p align="center">
+  <img src="img/most_popular_movies.png" alt="drawing" width="1000"/>
+</p>
+
+<p align="center">
+  <img src="img/gender_of_actors_in_the_most_popular_movies.png" alt="drawing" width="1000"/>
+</p>
+
+From these two plots we can see the ten movies with highest revenue, and the gender representation in these movies. Similarly as with the most popular movies, in all the movies there are more actors than actresses.
+
+<p align="center">
+  <img src="img/highest_revenue_movies.png" alt="drawing" width="1000"/>
+</p>
+
+<p align="center">
+  <img src="img/gender_of_actors_in_highest_revenue_movies.png" alt="drawing" width="1000"/>
+</p>
+
+We also investigated the gender distribution in the top ten production companies. Here again we clearly see an overrepresentation of the actors over the actresses.
+
+<p align="center">
+  <img src="img/gender_in_top_10_production_companies_actors.png" alt="drawing" width="1000"/>
+</p>
+
+As the next plot shows, the similar trend is also observed in the gender distribution of the cew in the top ten production companies.
+
+<p align="center">
+  <img src="img/gender_in_top_10_production_companies_crew.png" alt="drawing" width="1000"/>
+</p>
+
+And finally, we looked at the gender distribution of the crew by departments in the movie industry. Here, we see that the male crew members are overrepresented in all the departments, except the costume and makeup department where we see more female crew members.
+
+<p align="center">
+  <img src="img/gender_of_crew_by_department.png" alt="drawing" width="1000"/>
+</p>
+
+These results are strong enough to point us to a conclusion that there is gender bias in the Hollywood and the movie industry. This gives as an additional motivation to further investigate gender bias, and the recent movement towards gender equality in Hollywood. What is the impact of these movements is still an open question.
 
 ### 1.4 Related work
 
