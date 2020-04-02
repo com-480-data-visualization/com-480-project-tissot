@@ -50,12 +50,12 @@ d3.json('data/keywords-word-cloud.json').then(data => {
 
 d3.json('data/community.json').then(data => {
   const svg = d3.select('.community')
-    .attr('viewBox', [0, 0, width, height]);
+    .attr('viewBox', [0, 0, width, width]);
   
   const simulation = d3.forceSimulation(data.nodes)
-      .force('link', d3.forceLink(data.links).id(d => d.id))
-      .force('charge', d3.forceManyBody().strength(-1000))
-      .force('center', d3.forceCenter(0.5 * width, 0.5 * height));
+    .force('link', d3.forceLink(data.links).id(d => d.id))
+    .force('charge', d3.forceManyBody().strength(-2500))
+    .force('center', d3.forceCenter(0.5 * width, 0.5 * width));
 
   const link = svg.append('g')
     .attr('stroke', '#999')
@@ -117,4 +117,45 @@ d3.json('data/community.json').then(data => {
       .on('drag', dragged)
       .on('end', dragended);
   }
+});
+
+function drawBubblePlot(selector, data) {
+  data = {children: data}
+
+  var bubble = d3.pack(data)
+    .size([width, width])
+    .padding(1.5);
+
+  var svg = d3.select(selector)
+    .attr('viewBox', [0, 0, width, width]);
+
+  var nodes = d3.hierarchy(data)
+    .sum(d => d.size);
+
+  var node = svg.selectAll('g')
+    .data(bubble(nodes).descendants())
+    .enter().filter(d => !d.children).append('g')
+      .attr('transform', d => 'translate(' + [d.x, d.y] + ')');
+
+  node.append('clipPath')
+    .attr('id', 'clipCircle')
+    .append('circle')
+    .attr('r', d => d.r)
+    .style('fill-opacity', '0');
+  
+  node.append('svg:image')
+    .attr('xlink:href', d => d.data.poster_url )
+    .attr('x', d => -1.5*d.r)
+    .attr('y', d => -1.5*d.r)
+    .attr('width', d => 3*d.r)
+    .attr('height', d => 3*d.r)
+    .attr('clip-path', 'url(#clipCircle)');
+}
+
+d3.json('data/movies-with-most-women-actors.json').then(data => {
+  drawBubblePlot('.movies-with-most-women-actors', data)
+});
+
+d3.json('data/movies-with-most-man-actors.json').then(data => {
+  drawBubblePlot('.movies-with-most-man-actors', data)
 });
