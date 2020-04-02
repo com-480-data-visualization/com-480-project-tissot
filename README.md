@@ -41,7 +41,8 @@ Apart from gender equality, we plan to also explore the other dimensions of the 
 
 
 ### 1.3 Exploratory Data Analysis
-The dataset contains metadata for 4 803 movies, and metadata for the actors and the crew of the movies. For the actors, there is metadata for a total of 48 291 male actors, and 24 168 female actors. Similarly, for the crew there is metadata for a total of 43 000 male crew personnel, and 11 764 female personnel. We created a few plots to get more insight in the data, and see if there is enough information to answer our questions.
+
+The dataset contains metadata for 4 803 movies including metadata for the actors and the crew of the movies. For the actors, there is metadata for a total of 48 291 male actors, and 24 168 female actors. Similarly, for the crew there is metadata for a total of 43 000 male crew personnel, and 11 764 female personnel. We created a few plots to get more insight in the data, and see if there is enough information to answer our questions.
 
 This word cloud plot is a visual representation of the movie genres in our dataset. The most common movie genres are comedy, drama, thriller, action, etc.
 
@@ -76,26 +77,29 @@ We also investigated the gender distribution in the top ten production companies
   <img src="img/gender_in_top_10_production_companies_actors.png" alt="drawing" width="1000"/>
 </p>
 
-As the next plot shows, the similar trend is also observed in the gender distribution of the cew in the top ten production companies.
+As the next plot shows, the similar trend is also observed in the gender distribution of the crew in the top ten production companies.
 
 <p align="center">
   <img src="img/gender_in_top_10_production_companies_crew.png" alt="drawing" width="1000"/>
 </p>
 
-And finally, we looked at the gender distribution of the crew by departments in the movie industry. Here, we see that the male crew members are overrepresented in all the departments, except the costume and makeup department where we see more female crew members.
+Finally, we looked at the gender distribution of the crew by departments in the movie industry. Here, we see that the male crew members are overrepresented in all the departments, except the costume and makeup department where we see more female crew members.
 
 <p align="center">
   <img src="img/gender_of_crew_by_department.png" alt="drawing" width="1000"/>
 </p>
 
-These results are strong enough to point us to a conclusion that there is gender bias in the Hollywood and the movie industry. This gives as an additional motivation to further investigate gender bias, and the recent movement towards gender equality in Hollywood. What is the impact of these movements is still an open question.
+These results are strong enough to point us to a conclusion that there is gender bias in Hollywood and the movie industry in general. This gives us an additional motivation to further investigate gender bias, and the recent movement towards gender equality in Hollywood.
 
 ### 1.4 Related work
 
-- In this interesting [kaggle kernel](https://www.kaggle.com/gsdeepakkumar/movie-mania-exploring-the-movie-database) we found various visualizations exploring this dataset. The kernel includes visualizations about popularity of the movies, most common keywords, correlations between popularity and revenue, etc. But it lacks any visualizations about the gender of the actors or crew of the movies.
+The dataset is published on Kaggle, and there are around 1,500 kernels related to it. The authors of these kernels explore many different topics and dimensions of the dataset. Some popular topics include exploratory data analysis, recommendation engines, rating prediction and many others. As an example, in this [Kaggle kernel](https://www.kaggle.com/gsdeepakkumar/movie-mania-exploring-the-movie-database) we found various visualizations exploring this dataset. The kernel includes visualizations about popularity of the movies, most common keywords, correlations between popularity and revenue, etc. 
 
-- One interesting source of inspiration is [this](https://www.theatlantic.com/business/archive/2018/01/the-brutal-math-of-gender-inequality-in-hollywood/550232/) article where the writer says “Hollywood remains an industry where women are more likely to be celebrated for speaking out in front of a camera than for holding one”. They also used an interesting plot to visualize their findings, but we believe a more graphic and interactive article would have a bigger impact and better address the issue of gender inequality.
+However, to the best of our knowledge, there is no kernel that explores the gender inequality and the questions we are interested in. Moreover, the kernels at Kaggle are static notebooks that lack interactivity. Therefore, our approach is unique in the sense that it will address an unexplored dimension of the dataset, and it will also provide more interactive visualizations using D3.js.
 
+One interesting source of inspiration is [this](https://www.theatlantic.com/business/archive/2018/01/the-brutal-math-of-gender-inequality-in-hollywood/550232/) article that addresses the issue of underrepresentation of women in key behind-the-camera roles. The article also contains a visualization to support its claims. As mentioned before, we would like to create more thorough analysis of this phenomenon supported by more interactive and better visualizations. 
+
+Another source of inspiration was [this](https://exploringcomics.github.io/src/app/index.html?fbclid=IwAR0frEn46nzQFLah-BOkK7qGuKagq2uUa6IRhM9y3SjrinzpZ77cHs2eCpU) project from the last year's course. The project contains some very interesting visualizations that explore the diversity in comics. This inspired us to look into gender diversity in movies. 
 
 
 ## Milestone 2 (Friday 1st May, 5pm)
