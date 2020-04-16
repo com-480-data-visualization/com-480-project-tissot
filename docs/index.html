@@ -39,36 +39,38 @@
         <ul class="list-group">
           <a href="#" class="list-group-item timeline">TIMELINE</a>
           <a href="#" class="list-group-item word-cloud">Word Cloud</a>
-          <a href="#" class="list-group-item communities">Communities</a>
+          <a href="#" class="list-group-item community">Community</a>
           <a href="#" class="list-group-item posters">Posters</a>
         </ul>
       </div>
       <main class="bmd-layout-content">
         <div class="container">
           <div class="timeline">
-            <h1>TODO</h1>
+            <div class="col-lg-12">
+              <svg class="svg-timeline"></svg>
+            </div>
           </div>
 
           <div class="word-cloud" style="display: none;">
             <h3>Most common genres</h3>
             <div class="row">
               <div class="col-lg-12">
-                <svg class="genres-word-cloud"></svg>
+                <svg class="svg-genres-word-cloud"></svg>
               </div>
             </div>
 
             <h3>Most common keywords</h3>
             <div class="row">
               <div class="col-lg-12">
-                <svg class="keywords-word-cloud"></svg>
+                <svg class="svg-keywords-word-cloud"></svg>
               </div>
             </div>
           </div>
 
-          <div class="communities" style="display: none;">
+          <div class="community" style="display: none;">
             <div class="row">
               <div class="col-lg-12">
-                <svg class="community"></svg>
+                <svg class="svg-community"></svg>
               </div>
             </div>
           </div>
@@ -77,14 +79,14 @@
             <h3>Movies with Most Women Actors</h3>
             <div class="row">
               <div class="col-lg-12">
-                <svg class="movies-with-most-women-actors"></svg>
+                <svg class="svg-movies-with-most-women-actors"></svg>
               </div>
             </div>
 
             <h3>Movies with Most Man Actors</h3>
             <div class="row">
               <div class="col-lg-12">
-                <svg class="movies-with-most-man-actors"></svg>
+                <svg class="svg-movies-with-most-man-actors"></svg>
               </div>
             </div>
           </div>
@@ -100,7 +102,7 @@
     $(document).ready(function() {
       $('body').bootstrapMaterialDesign();
 
-      var last = $('div.word-cloud')
+      var last = $('div.timeline')
 
       $('.list-group-item').on('click', function() {
         var $this = $(this);
