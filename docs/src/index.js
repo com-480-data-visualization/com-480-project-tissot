@@ -3,6 +3,46 @@ const color = d3.scaleOrdinal(d3.schemeSet1);
 const width = 1000
 const height = 500
 
+d3.json('data/timeline.json').then(data => {
+  data = data.filter(d => d.release_year == 2000);
+
+  const mx = 100;
+  const my = 100;
+
+  const svg = d3.select('.svg-timeline')
+    .attr('viewBox', [-mx, -my, width + 2*mx, height + 2*my]);
+  
+  const max_budget = Math.max.apply(Math, data.map(o => o.budget))
+  const max_revenue = Math.max.apply(Math, data.map(o => o.revenue))
+  const max_popularity = Math.max.apply(Math, data.map(o => o.popularity))
+
+  var x = d3.scaleLinear()
+    .domain([0, max_budget])
+    .range([0, width]);
+  svg.append('g')
+    .attr('transform', 'translate(0,' + height + ')')
+    .call(d3.axisBottom(x));
+
+  var y = d3.scaleLinear()
+    .domain([0, max_revenue])
+    .range([height, 0]);
+  svg.append('g')
+    .call(d3.axisLeft(y));
+
+  var r = d3.scaleLinear()
+    .domain([0, max_popularity])
+    .range([2, 16]);
+
+  svg.append('g')
+    .selectAll('dot')
+    .data(data).enter()
+      .append('circle')
+      .attr('cx', d => x(d.budget))
+      .attr('cy', d => y(d.revenue))
+      .attr('r', d => r(d.popularity))
+      .style('fill', d => d.more_men_cast == 1 ? '#00f' : '#f00')
+});
+
 function drawWordCloud(selector, data) {
   const max = Math.max.apply(Math, data.map(o => o.size))
 
@@ -41,15 +81,15 @@ function drawWordCloud(selector, data) {
 }
 
 d3.json('data/genre-word-cloud.json').then(data => {
-  drawWordCloud('.genres-word-cloud', data)
+  drawWordCloud('.svg-genres-word-cloud', data)
 });
 
 d3.json('data/keywords-word-cloud.json').then(data => {
-  drawWordCloud('.keywords-word-cloud', data)
+  drawWordCloud('.svg-keywords-word-cloud', data)
 });
 
 d3.json('data/community.json').then(data => {
-  const svg = d3.select('.community')
+  const svg = d3.select('.svg-community')
     .attr('viewBox', [0, 0, width, width]);
   
   const simulation = d3.forceSimulation(data.nodes)
@@ -153,9 +193,9 @@ function drawBubblePlot(selector, data) {
 }
 
 d3.json('data/movies-with-most-women-actors.json').then(data => {
-  drawBubblePlot('.movies-with-most-women-actors', data)
+  drawBubblePlot('.svg-movies-with-most-women-actors', data)
 });
 
 d3.json('data/movies-with-most-man-actors.json').then(data => {
-  drawBubblePlot('.movies-with-most-man-actors', data)
+  drawBubblePlot('.svg-movies-with-most-man-actors', data)
 });
