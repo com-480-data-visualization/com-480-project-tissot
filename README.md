@@ -106,6 +106,9 @@ Another source of inspiration was [this](https://exploringcomics.github.io/src/a
 
 **10% of the final grade**
 
+Our project description for Milestone 2 can be found [here](https://github.com/com-480-data-visualization/com-480-project-tissot/blob/master/Milestone%202.pdf).
+
+Our initial website can be accessed on this [link](https://com-480-data-visualization.github.io/com-480-project-tissot/).
 
 
 
