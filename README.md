@@ -116,3 +116,5 @@ Our initial website can be accessed on this [link](https://com-480-data-visualiz
 
 **80% of the final grade**
 
+New [data](https://drive.google.com/file/d/1TwzDmfNnlbPByS1QvGwAwsTxtSwvzlCm/view?usp=sharing)
+
