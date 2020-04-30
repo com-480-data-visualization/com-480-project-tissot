@@ -3,8 +3,10 @@ const color = d3.scaleOrdinal(d3.schemeSet1);
 const width = 1000
 const height = 500
 
+const release_year = 2020
+
 d3.json('data/timeline.json').then(data => {
-  data = data.filter(d => d.release_year == 2000);
+  data = data[release_year];
 
   const mx = 100;
   const my = 100;
@@ -40,10 +42,12 @@ d3.json('data/timeline.json').then(data => {
       .attr('cx', d => x(d.budget))
       .attr('cy', d => y(d.revenue))
       .attr('r', d => r(d.popularity))
-      .style('fill', d => d.more_men_cast == 1 ? '#00f' : '#f00')
+      .style('fill', d => d.gender_lead == 'Male' ? '#00f' : '#f00')
 });
 
 function drawWordCloud(selector, data) {
+  data = data[release_year];
+
   const max = Math.max.apply(Math, data.map(o => o.size))
 
   const scale = d3.scaleLinear()
@@ -80,21 +84,29 @@ function drawWordCloud(selector, data) {
   }
 }
 
-d3.json('data/genre-word-cloud.json').then(data => {
-  drawWordCloud('.svg-genres-word-cloud', data)
+d3.json('data/male-lead-role.json').then(data => {
+  drawWordCloud('.svg-male-lead-role', data)
 });
 
-d3.json('data/keywords-word-cloud.json').then(data => {
-  drawWordCloud('.svg-keywords-word-cloud', data)
+d3.json('data/female-lead-role.json').then(data => {
+  drawWordCloud('.svg-female-lead-role', data)
 });
 
 d3.json('data/community.json').then(data => {
+  data = data[release_year];
+
+  const max = Math.max.apply(Math, data.links.map(o => o.value))
+
+  const scale = d3.scaleLinear()
+    .domain([0, max])
+    .range([0, 10]);
+
   const svg = d3.select('.svg-community')
     .attr('viewBox', [0, 0, width, width]);
   
   const simulation = d3.forceSimulation(data.nodes)
     .force('link', d3.forceLink(data.links).id(d => d.id))
-    .force('charge', d3.forceManyBody().strength(-2500))
+    .force('charge', d3.forceManyBody().strength(-10))
     .force('center', d3.forceCenter(0.5 * width, 0.5 * width));
 
   const link = svg.append('g')
@@ -103,7 +115,7 @@ d3.json('data/community.json').then(data => {
     .selectAll('line')
     .data(data.links)
     .enter().append('line')
-      .attr('stroke-width', d => d.value);
+      .attr('stroke-width', d => scale(d.value));
 
   const node = svg.append('g')
     .selectAll('g')
@@ -114,7 +126,8 @@ d3.json('data/community.json').then(data => {
     .attr('stroke', '#000')
     .attr('stroke-width', 2)
     .attr('r', 10)
-    .attr('fill', d => color(d.group))
+    .attr('fill', d => d.gender == 'Male' ? '#00f' : '#f00')
+    .attr('stroke', d => d.director == true ? 'black' : 'white')
     .call(drag(simulation));
 
   node.append('text')
@@ -157,45 +170,4 @@ d3.json('data/community.json').then(data => {
       .on('drag', dragged)
       .on('end', dragended);
   }
-});
-
-function drawBubblePlot(selector, data) {
-  data = {children: data}
-
-  var bubble = d3.pack(data)
-    .size([width, width])
-    .padding(1.5);
-
-  var svg = d3.select(selector)
-    .attr('viewBox', [0, 0, width, width]);
-
-  var nodes = d3.hierarchy(data)
-    .sum(d => d.size);
-
-  var node = svg.selectAll('g')
-    .data(bubble(nodes).descendants())
-    .enter().filter(d => !d.children).append('g')
-      .attr('transform', d => 'translate(' + [d.x, d.y] + ')');
-
-  node.append('clipPath')
-    .attr('id', 'clipCircle')
-    .append('circle')
-    .attr('r', d => d.r)
-    .style('fill-opacity', '0');
-  
-  node.append('svg:image')
-    .attr('xlink:href', d => d.data.poster_url )
-    .attr('x', d => -1.5*d.r)
-    .attr('y', d => -1.5*d.r)
-    .attr('width', d => 3*d.r)
-    .attr('height', d => 3*d.r)
-    .attr('clip-path', 'url(#clipCircle)');
-}
-
-d3.json('data/movies-with-most-women-actors.json').then(data => {
-  drawBubblePlot('.svg-movies-with-most-women-actors', data)
-});
-
-d3.json('data/movies-with-most-man-actors.json').then(data => {
-  drawBubblePlot('.svg-movies-with-most-man-actors', data)
 });
