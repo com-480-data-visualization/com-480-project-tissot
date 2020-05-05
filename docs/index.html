@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
 
-    <title>Data Visualization</title>
+    <title>COM-480 Data Visualization</title>
 
     <style>
       html {
@@ -37,40 +37,43 @@
           <a class="navbar-brand">Content</a>
         </header>
         <ul class="list-group">
-          <a href="#" class="list-group-item timeline">Gender Representation</a>
-          <a href="#" class="list-group-item">Categories</a>
-          <a href="#" class="list-group-item community">Communities</a>
-          <a href="#" class="list-group-item word-cloud">Thematic Diffenreces</a>
+          <a href="#" class="list-group-item gender-representation">Gender Representation</a>
+          <a href="#" class="list-group-item categories">Categories</a>
+          <a href="#" class="list-group-item collaborations">Collaborations</a>
+          <a href="#" class="list-group-item thematic-differences">Thematic Diffenreces</a>
         </ul>
       </div>
       <main class="bmd-layout-content">
         <div class="container">
-          <div class="timeline">
-            <div class="col-lg-12">
-              <svg class="svg-timeline"></svg>
+          <div class="gender-representation">
+            <div class="col-lg-12" id="wrapper-gender-representation">
             </div>
           </div>
 
-          <div class="community" style="display: none;">
+          <div class="categories" style="display: none;">
             <div class="row">
-              <div class="col-lg-12">
-                <svg class="svg-community"></svg>
+              <div class="col-lg-12" id="wrapper-categories">
               </div>
             </div>
           </div>
 
-          <div class="word-cloud" style="display: none;">
+          <div class="collaborations" style="display: none;">
+            <div class="row">
+              <div class="col-lg-12" id="wrapper-collaborations">
+              </div>
+            </div>
+          </div>
+
+          <div class="thematic-differences" style="display: none;">
             <h3>Male Lead Role</h3>
             <div class="row">
-              <div class="col-lg-12">
-                <svg class="svg-male-lead-role"></svg>
+              <div class="col-lg-12" id="wrapper-thematic-differences-male-lead">
               </div>
             </div>
 
             <h3>Female Lead Role</h3>
             <div class="row">
-              <div class="col-lg-12">
-                <svg class="svg-female-lead-role"></svg>
+              <div class="col-lg-12" id="wrapper-thematic-differences-female-lead">
               </div>
             </div>
           </div>
@@ -78,7 +81,6 @@
       </main>
     </div>
       
-
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
@@ -86,7 +88,7 @@
     $(document).ready(function() {
       $('body').bootstrapMaterialDesign();
 
-      var last = $('div.timeline')
+      var last = $('div.gender-representation')
 
       $('.list-group-item').on('click', function() {
         var $this = $(this);
