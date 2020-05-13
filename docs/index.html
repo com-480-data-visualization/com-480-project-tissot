@@ -1,96 +1,236 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>COM-480 Data Visualization</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.16.0/css/mdb.min.css" rel="stylesheet">
 
-    <style>
-      html {
-        height: 100%;
+  <title>COM-480 Data Visualization</title>
+
+  <style>
+    body {
+      max-width: 100%;
+    }
+
+    .grid {
+      display: grid;
+      grid-template: 430px 430px / auto 40%;
+      grid-gap: 5px;
+      padding: 5px;
+      background-color: #ffffff;
+    }
+
+    .module {
+      background: #eaeaea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .range-value {
+      position: relative;
+      top: -100%;
+    }
+
+    .range-value span {
+      width: 50px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      background: #007bff;
+      color: #fff;
+      font-size: 12px;
+      display: block;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -120%);
+      border-radius: 6px;
+    }
+
+    .range-value span:before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-top: 10px solid #007bff;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      margin-top: -1px;
+    }
+
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 25px;
+      background: #D3D3D3;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+    }
+
+    .slider:hover {
+      opacity: 1;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      background: #3a3a3a;
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      background: #3a3a3a;
+      cursor: pointer;
+    }
+
+    .sliderticks {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 10px;
+    }
+
+    .sliderticks p {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      width: 1px;
+      background: #D3D3D3;
+      height: 10px;
+      line-height: 40px;
+      margin: 0 0 20px 0;
+    }
+
+    .sidebar {
+      /* 100% Full-height */
+      width: 0;
+      /* 0 width - change this with JavaScript */
+      position: fixed;
+      /* Stay in place */
+      z-index: 1;
+      /* Stay on top */
+      top: 0;
+      right: 0;
+      background-color: #cccccc;
+      /* Black*/
+      overflow-x: hidden;
+      overflow-y: hidden;
+      /* Disable horizontal scroll */
+      padding-top: 20px;
+      /* Place content 60px from the top */
+      /* transition: 0.5s; */
+      /* 0.5 second transition effect to slide in the sidebar */
+      display: block;
+      margin-top: 5px;
+    }
+
+
+    /* Position and style the close button (top right corner) */
+    .sidebar .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+      color: black;
+    }
+
+    @media screen and (max-height: 450px) {
+      .sidebar {
+        padding-top: 15px;
       }
 
-      body {
-        height: 100%;
+      .sidebar a {
+        font-size: 18px;
       }
-    </style>
-  </head>
-  <body>
-    <div class="bmd-layout-container bmd-drawer-f-l">
-      <header class="bmd-layout-header">
-        <div class="navbar navbar-light bg-faded">
-          <button class="navbar-toggler" type="button" data-toggle="drawer" data-target="#dw-s1">
-            <span class="sr-only">Toggle drawer</span>
-            <i class="material-icons">menu</i>
-          </button>
-          <ul class="nav navbar-nav">
-            <li class="nav-item">Gender Bias in the Movie Industry</li>
-          </ul>
-        </div>
-      </header>
-      <div id="dw-s1" class="bmd-layout-drawer bg-faded">
-        <header>
-          <a class="navbar-brand">Content</a>
-        </header>
-        <ul class="list-group">
-          <a href="#" class="list-group-item gender-representation">Gender Representation</a>
-          <a href="#" class="list-group-item categories">Categories</a>
-          <a href="#" class="list-group-item collaborations">Collaborations</a>
-          <a href="#" class="list-group-item thematic-differences">Thematic Diffenreces</a>
-        </ul>
+    }
+
+    div.tooltip {
+      position: absolute;
+      text-align: center;
+      /* width: 80px; */
+      /* height: 28px; */
+      padding: 5px;
+      background: white;
+      border: 0px;
+      border-radius: 5px;
+      pointer-events: none;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="infoSidebar" class="sidebar">
+    <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
+
+  </div>
+
+  <div class="grid">
+
+    <div class="module" id="wrapper-gender-representation"><svg class="plot-overlay" preserveAspectRatio="xMidYMid meet"
+        width="98%" height="98%"></svg></div>
+    <div class="module" id="wrapper-collaborations"><svg class="plot-overlay" preserveAspectRatio="xMidYMid meet"
+        width="98%" height="98%"></svg></div>
+    <div class="module" id="wrapper-categories"><svg class="plot-overlay" preserveAspectRatio="xMidYMid meet"
+        width="98%" height="98%"></svg></div>
+    <div class="module" id="wrapper-wordcloud">
+      <svg class="plot-overlay" id="male-cloud" width="50%" height="90%"></svg>
+      <svg class="plot-overlay" id="female-cloud" width="50%" height="90%"></svg></div>
+
+  </div>
+
+  <div class="d-flex justify-content-left my-1 pl-4 pr-4">
+    <!-- <div class="range-value" id="rangeV"></div> -->
+    <form class="range-field" style="width: 100%">
+      <!-- <input id="range" class="custom-range" type="range" min="2000" max="2020" , step="1" /> -->
+      <input id="range" class="slider" type="range" min="2000" max="2020" , step="1" style="width: 100%" />
+      <div class="sliderticks">
       </div>
-      <main class="bmd-layout-content">
-        <div class="container">
-          <div class="gender-representation">
-            <div class="col-lg-12" id="wrapper-gender-representation">
-            </div>
-          </div>
+    </form>
+  </div>
 
-          <div class="categories" style="display: none;">
-            <div class="row">
-              <div class="col-lg-12" id="wrapper-categories">
-              </div>
-            </div>
-          </div>
-
-          <div class="collaborations" style="display: none;">
-            <div class="row">
-              <div class="col-lg-12" id="wrapper-collaborations">
-              </div>
-            </div>
-          </div>
-
-          <div class="thematic-differences" style="display: none;">
-            <h3>Male Lead Role</h3>
-            <div class="row">
-              <div class="col-lg-12" id="wrapper-thematic-differences-male-lead">
-              </div>
-            </div>
-
-            <h3>Female Lead Role</h3>
-            <div class="row">
-              <div class="col-lg-12" id="wrapper-thematic-differences-female-lead">
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-      
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
-    <script>
-    $(document).ready(function() {
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"
+    integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
+    integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
+    crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function () {
       $('body').bootstrapMaterialDesign();
 
       var last = $('div.gender-representation')
 
-      $('.list-group-item').on('click', function() {
+      $('.list-group-item').on('click', function () {
         var $this = $(this);
 
         $('.active').removeClass('active');
@@ -102,10 +242,12 @@
         last.show();
       })
     });
-    </script>
-    
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
-    <script src="src/index.js"></script>
-  </body>
+  </script>
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
+  <script src="src/themoviedb.js"></script>
+  <script src="src/index.js"></script>
+</body>
+
 </html>
