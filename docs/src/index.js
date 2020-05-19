@@ -7,7 +7,7 @@ function whenDocumentLoaded(action) {
     }
 }
 
-let yearStart = 2000
+let yearStart = 1990
 let yearEnd = 2021
 let releaseYears = Array(yearEnd - yearStart + 1)
     .fill()
@@ -26,7 +26,7 @@ const fill = gender => gender == "Male" ? "#377eb8" : (gender == "Female" ? "#e4
 
 let nav_clicked = false
 
-function insertNavElement(element_id, element_type, content, parent, padTop = "10px") {
+function insertNavElement(element_id, element_type, content, parent, padTop = "30px") {
     let element = document.getElementById(element_id)
     if (element) { element.remove() }
     element = document.createElement(element_type)
@@ -40,7 +40,7 @@ function insertNavElement(element_id, element_type, content, parent, padTop = "1
     return element
 }
 
-function openNavMovie(movie_info, credits_info) {
+function openNavMovie(movie_info, credits_info, video_info) {
 
     url_path = movie_info['poster_path']
     title = movie_info['original_title']
@@ -49,8 +49,8 @@ function openNavMovie(movie_info, credits_info) {
     options = { size: 'w300', file: url_path }
     url = theMovieDb.common.getImage(options)
 
-    sidebar = document.getElementById("infoSidebar")
-    sidebar.innerHTML += '<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>'
+    sidebar = document.getElementById("scatterPopup")
+    sidebar.innerHTML += '<a href="javascript:void(0)" class="closebtn" onclick="closeNavMovie()">&times;</a>'
     poster = document.getElementById('poster');
 
     if (poster) { poster.remove() }
@@ -69,6 +69,7 @@ function openNavMovie(movie_info, credits_info) {
     link.style.height = "375px"
     link.style.width = "250px"
     link.style.paddingLeft = "20px"
+    link.style.paddingTop = "20px"
     link.style.display = "inline-block"
     sidebar.appendChild(link)
 
@@ -84,30 +85,51 @@ function openNavMovie(movie_info, credits_info) {
     sidebar.appendChild(summary_wrapper)
 
     // insert title
-    insertNavElement('header', 'h2', title, summary_wrapper)
+    insertNavElement('header', 'h3', title, summary_wrapper)
 
     // insert overview
-    insertNavElement('overview', 'p', overview_text, summary_wrapper)
+    if (overview_text.length > 620) {
+        overview_text = overview_text.slice(0, 620) + "..."
+    }
+    el = insertNavElement('overview', 'p', overview_text, summary_wrapper, "5px")
+    el.style.paddingRight = "20px"
+    el.style.textAlign = "justify"
 
     director_name = credits_info['crew'].filter(d => d.job == 'Director')[0].name
-    insertNavElement('director', 'p', "Director: " + director_name, summary_wrapper)
+    insertNavElement('director', 'p', "<b>Director:</b> " + director_name, summary_wrapper, "10px")
 
     summary_wrapper.appendChild(document.createElement("br"))
 
     leading_star_name = credits_info['cast'][0].name
-    element = insertNavElement('star', 'p', "Main star: " + leading_star_name, summary_wrapper, "0px")
+    element = insertNavElement('star', 'p', "<b>Main star:</b> " + leading_star_name, summary_wrapper, "0px")
 
-    sidebar.style.width = "60%";
-    sidebar.style.height = "430px";
-    sidebar.style.right = "";
-    sidebar.style.left = "-5px";
+    // insert trailer
+    let video_trailer = document.getElementById('video_trailer')
+    if (video_trailer) { video_trailer.remove() }
+    video_trailer = document.createElement("iframe")
+    video_trailer.id = "video_trailer"
+    video_trailer.src = "https://www.youtube.com/embed/" + video_info.results[0].key
+    video_trailer.style.width = "98%"
+    video_trailer.style.height = "50%"
+    video_trailer.frameBorder = "0"
+    video_trailer.style.paddingLeft = "25px"
+    video_trailer.style.paddingTop = "15px"
+    summary_wrapper.style.display = "inline-block"
+
+    sidebar.appendChild(video_trailer)
+
+    sidebar.style.width = "100%";
+    sidebar.style.height = "100%";
     link.style.paddingLeft = "25px"
     sidebar.style.top = "0"
 }
 
-function openNavActor(actor_info) {
+function closeNavMovie() {
+    document.getElementById("scatterPopup").style.width = "0";
+    document.getElementById("scatterPopup").innerHTML = ""
+}
 
-    console.log(actor_info)
+function openNavActor(actor_info) {
     url_path = actor_info['profile_path']
 
     if (url_path == null) {
@@ -118,9 +140,9 @@ function openNavActor(actor_info) {
         url = theMovieDb.common.getImage(options)
     }
 
-    sidebar = document.getElementById("infoSidebar")
-    sidebar.innerHTML += '<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>'
-    poster = document.getElementById('poster');
+    sidebar = document.getElementById("graphPopup")
+    sidebar.innerHTML += '<a href="javascript:void(0)" class="closebtn" onclick="closeNavActor()">&times;</a>'
+    poster = document.getElementById('profilePhoto');
 
     if (poster) { poster.remove() }
 
@@ -134,18 +156,19 @@ function openNavActor(actor_info) {
     else {
         link.src = no_img_src
     }
-    link.id = "poster"
+    link.id = "profilePhoto"
     link.style.height = "375px"
     link.style.width = "250px"
     link.style.paddingLeft = "20px"
+    link.style.paddingTop = "20px"
     link.style.display = "inline-block"
     sidebar.appendChild(link)
 
     // insert summary div
-    let summary_wrapper = document.getElementById('summary_wrapper')
+    let summary_wrapper = document.getElementById('summary_wrapper_actor')
     if (summary_wrapper) { summary_wrapper.remove() }
     summary_wrapper = document.createElement("div")
-    summary_wrapper.id = "summary_wrapper"
+    summary_wrapper.id = "summary_wrapper_actor"
     summary_wrapper.style.display = "inline-block"
     summary_wrapper.style.paddingLeft = "20px"
     summary_wrapper.style.width = "50%"
@@ -155,35 +178,36 @@ function openNavActor(actor_info) {
     genders = ["Male", "Female"]
 
     // insert name
-    insertNavElement('header', 'h2', actor_info['name'], summary_wrapper)
+    insertNavElement('header_actor', 'h2', actor_info['name'] ? actor_info['name'] : '/', summary_wrapper)
     summary_wrapper.appendChild(document.createElement("br"))
 
     // insert birthday
-    insertNavElement('birthday', 'p', "Birthday: " + actor_info['birthday'], summary_wrapper)
+    insertNavElement('birthday', 'p', "<b>Birthday:</b> " + (actor_info['birthday'] ? actor_info['birthday'] : '/'), summary_wrapper)
     summary_wrapper.appendChild(document.createElement("br"))
 
     // insert birthplace
-    insertNavElement('birthplace', 'p', "Place of birth: " + actor_info['place_of_birth'], summary_wrapper, "0px")
+    insertNavElement('birthplace', 'p', "<b>Place of birth:</b> " + (actor_info['place_of_birth'] ? actor_info['place_of_birth'] : '/'), summary_wrapper, "0px")
     summary_wrapper.appendChild(document.createElement("br"))
 
     // insert gender
-    insertNavElement('gender', 'p', "Gender: " + genders[actor_info['gender']], summary_wrapper, "0px")
+    insertNavElement('gender', 'p', "<b>Gender:</b> " + (genders[actor_info['gender']] ? genders[actor_info['gender']] : '/'), summary_wrapper, "0px")
     summary_wrapper.appendChild(document.createElement("br"))
 
     // insert biography
-    insertNavElement('popularity', 'p', "Popularity: " + actor_info['popularity'], summary_wrapper, "0px")
+    insertNavElement('popularity', 'p', "<b>Popularity:</b> " + (actor_info['popularity'] ? actor_info['popularity'] : '/'), summary_wrapper, "0px")
 
-    sidebar.style.width = "40%";
-    sidebar.style.height = "430px";
+    sidebar.style.width = "100%";
+    sidebar.style.height = "100%";
+    link.style.paddingLeft = "25px";
+    sidebar.style.top = "0"
     sidebar.style.left = "";
     sidebar.style.right = "0";
-    sidebar.style.top = "0";
 }
 
 
-function listNav(ids, left, down, genre, gender) {
-    sidebar = document.getElementById("infoSidebar")
-    sidebar.innerHTML += '<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>'
+function listNav(ids, genre, gender, role) {
+    sidebar = document.getElementById("barPopup")
+    sidebar.innerHTML += '<a href="javascript:void(0)" class="closebtn" onclick="closeNavBar()">&times;</a>'
     posters = document.getElementsByClassName('poster');
     console.log(posters)
     if (posters.length > 0) {
@@ -192,14 +216,16 @@ function listNav(ids, left, down, genre, gender) {
         }
     }
 
-    const header = document.createElement("h1")
-    header.innerText = "Top " + genre + " movies with " + gender + " stars"
+    const header = document.createElement("h2")
+    header.innerText = "Top " + genre + " movies with " + gender + " " + role
     header.style.textAlign = "center"
     header.style.paddingRight = "30px"
+    header.style.paddingTop = "20px"
     sidebar.appendChild(header)
 
     const wrapper = document.createElement("div")
-    wrapper.style.paddingLeft = "30px"
+    wrapper.style.paddingLeft = "20px"
+    wrapper.style.paddingTop = "15px"
     sidebar.appendChild(wrapper)
     ids = ids.slice(0, 5)
     ids.forEach(element => {
@@ -219,38 +245,32 @@ function listNav(ids, left, down, genre, gender) {
                 link.style.display = "inline-block"
                 link.className = "poster"
 
-                link.style.height = "300px"
-                link.style.width = "200px"
+                link.style.height = "250px"
+                link.style.width = "170px"
                 wrapper.appendChild(link)
                 link.style.paddingRight = "10px"
 
             },
             () => { console.log("f") })
     });
-    sidebar.style.paddingLeft = "25px"
-    if (left) {
-        sidebar.style.width = "40%";
-        sidebar.style.height = "430px";
-        sidebar.style.left = "";
-        sidebar.style.right = "0";
-    }
-    else {
-        sidebar.style.width = "60%";
-        sidebar.style.height = "430px";
-        sidebar.style.right = "";
-        sidebar.style.left = "-5px";
-    }
-    if (down) {
-        sidebar.style.top = "435px"
-    }
-    // sidebar.style.transition = "0.5s"
+
+    sidebar.style.width = "100%";
+    sidebar.style.height = "100%";
+    link.style.paddingLeft = "25px";
+    sidebar.style.top = "0"
+    sidebar.style.left = "";
+    sidebar.style.right = "0";
 }
 
 /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
-function closeNav() {
-    document.getElementById("infoSidebar").style.width = "0";
-    document.getElementById("infoSidebar").innerHTML = ""
-    document.getElementById("infoSidebar").style.paddingLeft = "0";
+function closeNavActor() {
+    document.getElementById("graphPopup").style.width = "0";
+    document.getElementById("graphPopup").innerHTML = ""
+}
+
+function closeNavBar() {
+    document.getElementById("barPopup").style.width = "0";
+    document.getElementById("barPopup").innerHTML = ""
 }
 
 function scatter_click(d) {
@@ -260,16 +280,18 @@ function scatter_click(d) {
             theMovieDb.movies.getCredits(d,
                 (r2) => {
                     credits_info = JSON.parse(r2)
-                    openNavMovie(movie_info, credits_info)
+                    theMovieDb.movies.getVideos(d, (r3) => {
+                        video_info = JSON.parse(r3)
+                        openNavMovie(movie_info, credits_info, video_info)
+                    },
+                        () => { console.log("f") })
                 },
                 () => { console.log("f") })
-            console.log(movie_info)
         },
         () => { console.log("f") })
 }
 
 function network_click(d) {
-    console.log(d)
     theMovieDb.people.getById({ 'id': d.tmdbId },
         (r) => {
             actor_info = JSON.parse(r)
@@ -292,7 +314,11 @@ function getOffset(element) {
 
 class ScatterPlot {
 
-    constructor(figure_element_id, dataset) {
+    constructor() {
+
+    }
+
+    initialize(figure_element_id, dataset) {
         this.dataset = dataset
         this.year = document.getElementById("range").value
         this.datasetYear = this.dataset[this.year]
@@ -414,17 +440,16 @@ class ScatterPlot {
             .transition(t)
             .attr("cx", d => this.xScale(this.xAccessor(d)))
             .attr("cy", d => this.yScale(this.yAccessor(d)))
-            .attr("r", d => this.rScale(this.rAccessor(d)))
             .attr("fill", d => fill(this.cAccessor(d)))
+            .attr("r", d => this.rScale(this.rAccessor(d)))
+
         dots.enter()
             .append("circle")
             .on("click", function (d) { scatter_click(d) })
             .on('mouseover', function (d) {
-                let cx = parseInt(d3.select(this).attr("cx"))
-                let cy = parseInt(d3.select(this).attr("cy"))
-                let r = parseInt(d3.select(this).attr("r"))
-                let new_cx = cx + 80
-                let new_cy = cy - r - 25
+                let offset = getOffset(this)
+                let new_cx = offset.left
+                let new_cy = offset.top - 40
                 if (new_cy < 0) {
                     new_cy = cy + r + 30
                 }
@@ -445,7 +470,6 @@ class ScatterPlot {
                     .style("white-space", "nowrap");
             })
             .on('mouseout', function (d) {
-                console.log(scatter)
                 scatter.bounds.selectAll("circle")
                     .transition()
                     .style("opacity", 1);
@@ -474,6 +498,25 @@ class ScatterPlot {
         this.update()
     }
 
+    setColorSelector(role) {
+        if (role == 'director') {
+            this.cAccessor = d => d.genderDirector
+        }
+        else if (role == 'actor') {
+            this.cAccessor = d => d.genderLead
+        }
+        this.bounds.selectAll("circle")
+            .data(this.datasetYear)
+            .transition()
+            .duration(300)
+            .attr("r", 0)
+            .transition()
+            .duration(300)
+            .attr("r", d => this.rScale(this.rAccessor(d)))
+            .attr("fill", d => fill(this.cAccessor(d)))
+
+    }
+
     brushended() {
         var s = d3.event.selection;
         if (!s) {
@@ -481,9 +524,6 @@ class ScatterPlot {
             this.xScale.domain(d3.extent(this.datasetYear, this.xAccessor)).nice()
             this.yScale.domain(d3.extent(this.datasetYear, this.yAccessor)).nice()
             this.rScale.domain(d3.extent(this.datasetYear, this.rAccessor))
-
-            // this.xAxis.transition(t).call(this.xAxisGenerator)
-            // this.yAxis.transition(t).call(this.yAxisGenerator)
         } else {
 
             this.xScale.domain([s[0][0], s[1][0]].map(this.xScale.invert, this.xScale));
@@ -499,15 +539,12 @@ class ScatterPlot {
 
     zoom() {
         const t = d3.transition().duration(2000)
-        this.xAxis.transition(t).call(this.xAxisGenerator)
-        this.yAxis.transition(t).call(this.yAxisGenerator)
-        this.bounds.selectAll("circle").transition(t)
+        this.xAxis.transition().duration(2000).call(this.xAxisGenerator)
+        this.yAxis.transition().duration(2000).call(this.yAxisGenerator)
+        this.bounds.selectAll("circle").transition("zoomCircles").duration(2000)
             .attr("cx", d => this.xScale(this.xAccessor(d)))
             .attr("cy", d => this.yScale(this.yAccessor(d)))
             .attr("r", d => {
-                console.log(this.xScale(this.xAccessor(d)))
-                console.log(this.dimensions.margin.left)
-                console.log(this.xScale(this.xAccessor(d)) < this.dimensions.left)
                 if (this.xScale(this.xAccessor(d)) < 0 || this.yScale(this.yAccessor(d)) > this.dimensions.boundedHeight) {
                     return 0
                 }
@@ -520,14 +557,18 @@ class ScatterPlot {
 
 class BarPlot {
 
-    constructor(figure_element_id, dataset, popularity_dataset) {
-        this.category = 'genres'
+    constructor() {
+
+    }
+
+    initialize(figure_element_id, dataset, popularity_dataset) {
+        this.role = 'actor'
         this.dataset = dataset
         this.popularity_dataset = popularity_dataset
 
         this.year = document.getElementById('range').value
 
-        this.subgroups = ["Male", "Female"]
+        this.subgroups = ["Female", "Male"]
 
         this.figure_element_id = figure_element_id;
         this.svg = d3.select('#' + figure_element_id + ' svg');
@@ -560,32 +601,20 @@ class BarPlot {
                 }px)`)
             .style("width", "100%")
             .style("height", "100%")
-        this.update()
-    }
 
-    update() {
-        const t = d3.transition().duration(2000)
-
-        this.selectedDataset = this.dataset[this.category][this.year]
+        this.selectedDataset = this.dataset[this.year][this.role]
         this.transformedData = Object.entries(this.selectedDataset).map(
             function (x) {
-                return { "group": x[0], "Male": x[1]["Male"], "Female": x[1]["Female"] }
-            })
-        this.groups = Object.keys(this.selectedDataset).sort()
+                return { "group": x[0], "Female": x[1]["Female"], "Male": x[1]["Male"] }
+            }).sort((a, b) => b['Female'] - a['Female']).slice(0, 20)
+        this.groups = this.transformedData.map(x => x['group'])
 
         const yScale = d3.scaleBand()
             .domain(this.groups)
             .range([0, this.dimensions.boundedHeight])
             .padding([0.3])
 
-        if (this.yAxis) {
-            this.yAxis.remove()
-        }
-        if (this.xAxis) {
-            this.xAxis.remove()
-        }
         this.yAxis = this.bounds.append("g").call(d3.axisLeft(yScale).tickSizeOuter(0))
-
 
         const xScale = d3.scaleLinear()
             .domain([0, 100])
@@ -603,9 +632,7 @@ class BarPlot {
             .style("font-size", "1.4em")
             .style("transform", "rotate(-90deg)")
             .style("text-anchor", "middle")
-            .text(this.category)
-
-
+            .text("Genres")
 
         this.xAxisLabel = this.xAxis.append("text")
             .attr("x", this.dimensions.boundedWidth * 0.5)
@@ -613,24 +640,48 @@ class BarPlot {
             .attr("fill", "black")
             .style("font-size", "1.4em")
             .text("Percent")
+        this.update()
+    }
 
+    update() {
+        const t = d3.transition().duration(1500)
+
+        this.selectedDataset = this.dataset[this.year][this.role]
+        this.transformedData = Object.entries(this.selectedDataset).map(
+            function (x) {
+                return { "group": x[0], "Female": x[1]["Female"], "Male": x[1]["Male"] }
+            }).sort((a, b) => b['Female'] - a['Female']).slice(0, 20)
+        this.groups = this.transformedData.map(x => x['group'])
+
+        const yScale = d3.scaleBand()
+            .domain(this.groups)
+            .range([0, this.dimensions.boundedHeight])
+            .padding([0.3])
+
+        const xScale = d3.scaleLinear()
+            .domain([0, 100])
+            .range([0, this.dimensions.boundedWidth]);
+
+        this.xAxis.transition(t).call(d3.axisBottom(xScale))
+        this.yAxis.transition(t).call(d3.axisLeft(yScale).tickSizeOuter(0))
 
         this.stackedData = d3.stack().keys(this.subgroups)(this.transformedData)
 
-        this.bounds.selectAll(".bars").selectAll("rect").remove().exit()
-        this.bounds.selectAll(".bars").selectAll("g").remove().exit()
+        this.bounds.selectAll(".bars").selectAll("rect").remove()
+        this.bounds.selectAll(".bars").selectAll("g").remove()
 
         this.rects = this.bounds.append("g")
             .attr("class", "bars")
             .selectAll("g")
             // Enter in the stack data = loop key per key = group per group
             .data(this.stackedData)
-            .enter().append("g")
-            .attr("fill", function (d) { return fill(d.key); })
-            .selectAll("rect")
+            .enter()
+            .append("g")
+                .attr("fill", function (d) { return fill(d.key); })
+                .selectAll("rect")
 
         var div = d3.select("body").append("div")
-            .attr("class", "tooltip")
+            .attr("class", "tooltip")   
             .style("opacity", 0);
 
         // enter a second time = loop subgroup per subgroup to add all rectangles
@@ -638,10 +689,11 @@ class BarPlot {
             .enter()
             .append("rect")
             .on("click", d => this.onClick(this, d))
-            .attr("y", function (d) { return yScale(d.data.group); })
-            .attr("x", function (d) { if (d[0] == 0) { return xScale(d[0]); } else return xScale(d[1]); })
-            .attr("width", function (d) { return 0; })
-            .attr("height", yScale.bandwidth())
+            .attr("y", function (d) { return yScale(d.data.group) + yScale.bandwidth(); })
+            .attr("x", function (d) { return xScale(d[0]); })
+            //.attr("x", function (d) { if (d[0] == 0) { return xScale(d[0]); } else return xScale(d[1]); })
+            .attr("width", function (d) { return xScale(d[1]) - xScale(d[0]); })
+            .attr("height", 0)
             .on('mouseover', function (d) {
                 d3.selectAll(".bars rect")
                     .transition()
@@ -655,13 +707,13 @@ class BarPlot {
                     .style("opacity", .9);
                 div.html(Math.round(Math.abs(d[0] - d[1]) * 10) / 10)
                     .style("left", d3.event.pageX + "px")
-                    .style("top", (d3.event.pageY-40) + "px")
+                    .style("top", (d3.event.pageY - 40) + "px")
                     .style("white-space", "nowrap");
             })
             .on('mousemove', function (d) {
                 div.html(Math.round(Math.abs(d[0] - d[1]) * 10) / 10 + "%")
                     .style("left", d3.event.pageX + "px")
-                    .style("top", (d3.event.pageY-40) + "px")
+                    .style("top", (d3.event.pageY - 40) + "px")
                     .style("white-space", "nowrap");
             })
             .on('mouseout', function (d) {
@@ -675,16 +727,23 @@ class BarPlot {
                     .duration(500)
                     .style("opacity", 0);
             })
+            .sort((a, b) => { return a.data['Female'] - b.data['Female'] })
 
         this.bounds.selectAll("rect")
-            .transition()
-            .duration(2000)
-            .attr("x", function (d) { return xScale(d[0]); })
-            .attr("width", function (d) { return xScale(d[1]) - xScale(d[0]); })
+            .transition("barFadeIn")
+            .duration(1000)
+            .attr("height", yScale.bandwidth())
+            .attr("y", function (d) { return yScale(d.data.group); })
     }
 
     setYear(year) {
         this.year = year
+        this.update()
+    }
+
+
+    setRole(role) {
+        this.role = role
         this.update()
     }
 
@@ -693,15 +752,20 @@ class BarPlot {
     }
 
     onClick(object, d) {
-        const selected_gender = d[0] == 0 ? 'Male' : 'Female'
-        const ids = object.popularity_dataset[object.category][object.year][d.data.group][selected_gender]
-        listNav(ids, false, true, d.data.group.toLowerCase(), selected_gender.toLowerCase())
+        const selected_gender = d[0] == 0 & d[1] != 100 ? 'Female' : 'Male'
+        const ids = object.popularity_dataset['genres'][object.year][d.data.group][this.role][selected_gender]
+        listNav(ids, d.data.group.toLowerCase(), selected_gender.toLowerCase(), this.role == 'actor' ? 'stars' : 'directors')
 
     }
 }
 
 class Graph {
-    constructor(figure_element_id, dataset) {
+
+    constructor() {
+
+    }
+
+    initialize(figure_element_id, dataset) {
         this.dataset = dataset
 
         this.idAccessor = d => d.id
@@ -720,18 +784,52 @@ class Graph {
             width: svg_width,
             height: svg_height,
         }
+
+        this.male_director = true
+        this.female_director = true
+        this.male_actor = true
+        this.female_actor = true
     }
 
-    // TODO: transitions?
     update() {
+        this.svg.selectAll("*").remove()
+        this.simulation = null
+        let director_genders = []
+        if (this.male_director) {
+            director_genders.push("Male")
+        }
+        if (this.female_director) {
+            director_genders.push("Female")
+        }
+
+        let actor_genders = []
+        if (this.male_actor) {
+            actor_genders.push("Male")
+        }
+        if (this.female_actor) {
+            actor_genders.push("Female")
+        }
         this.svg.selectAll("*").remove();
 
         this.endTime = Date.now() + 5000;
 
         this.datasetYear = this.dataset[this.year]
 
-        this.nodes = this.datasetYear.nodes
-        this.links = this.datasetYear.links
+
+        this.nodes = []
+
+        this.nodes = this.datasetYear.nodes.filter(d => d.isDirector && director_genders.includes(d.gender) ||
+            !d.isDirector && actor_genders.includes(d.gender))
+        let node_ids = this.nodes.map(d => d.id)
+
+
+        this.links = this.datasetYear.links.filter(d => node_ids.includes(d.source) && node_ids.includes(d.target))
+
+
+
+        if (this.links.length == 0) {
+            this.links = this.datasetYear.links.filter(d => node_ids.includes(d.source.id) && node_ids.includes(d.target.id))
+        }
 
         this.wrapper = this.svg
             .call(d3.zoom().on("zoom", () => wrapper.attr("transform", d3.event.transform)))
@@ -752,6 +850,7 @@ class Graph {
             .enter().append("line")
             .attr("stroke-width", d => this.lineWidthScale(this.lineWidthAccessor(d)))
 
+
         this.simulation = d3.forceSimulation()
             .force("link", d3.forceLink().id(d => this.idAccessor(d)).distance(0).strength(0.1))
             .force("charge", d3.forceManyBody().strength(-30))
@@ -770,12 +869,33 @@ class Graph {
             .attr("class", "tooltip")
             .style("opacity", 0);
         this.node = this.node.data(this.nodes)
-            .enter().append("rect")
+            .enter()//.append("rect")
+            .append("image")
+            .attr("xlink:href", function (d) {
+                if (d.isDirector) {
+                    if (d.gender == 'Male') {
+                        return "male_director.png"
+                    }
+                    else {
+                        return "female_director.png"
+                    }
+                }
+                else {
+                    if (d.gender == 'Male') {
+                        return "male_actor.png"
+                    }
+                    else {
+                        return "female_actor.png"
+                    }
+                }
+
+            })
             .on("click", function (d) { network_click(d) })
             .attr("x", -10).attr("y", -10)
             .attr("width", 20).attr("height", 20)
             .attr("rx", d => this.radius(this.radiusAccessor(d)) * 10)
             .attr("fill", d => fill(this.colorAccessor(d)))
+            .attr("class", d => d.isDirector ? 'director' : 'actor')
             .on('mouseover', function (d) {
                 let offset = getOffset(this)
                 let new_cx = offset.left - 50
@@ -795,7 +915,7 @@ class Graph {
                 if (new_cy < 0) {
                     new_cy = new_cy + 60
                 }
-                graph.wrapper.selectAll("rect")
+                graph.wrapper.selectAll("image")
                     .transition()
                     .style("opacity", 0.3);
                 graph.wrapper.selectAll("line")
@@ -814,7 +934,7 @@ class Graph {
                     .style("white-space", "nowrap");
             })
             .on('mouseout', function (d) {
-                graph.wrapper.selectAll("rect")
+                graph.wrapper.selectAll("image")
                     .transition()
                     .style("opacity", 1);
                 d3.select(this)
@@ -826,6 +946,7 @@ class Graph {
                     .duration(500)
                     .style("opacity", 0);
             })
+
 
         this.simulation.nodes(this.nodes)
         this.simulation.force("link").links(this.links)
@@ -850,6 +971,7 @@ class Graph {
                 .attr("y2", d => this.yScale(d.target.y))
 
             this.node.attr("transform", d => `translate(${this.xScale(d.x)}, ${this.yScale(d.y)})`)
+            this.node.attr("transform", d => `translate(${this.xScale(d.x)}, ${this.yScale(d.y)})`)
         } else {
             this.simulation.stop();
         }
@@ -859,71 +981,42 @@ class Graph {
         this.year = year
         this.update()
     }
-}
 
-class WordCloud {
-    constructor(figure_element_id, dataset, color) {
-        this.dataset = dataset
-        this.tAccessor = d => d.text
-        this.sAccessor = d => d.size
-        this.color = color
-
-        this.svg = d3.select("#" + figure_element_id)
-
-        const svg_width = Number(this.svg.style("width").slice(0, -2))
-        const svg_height = Number(this.svg.style("height").slice(0, -2))
-
-        this.dimensions = {
-            width: svg_width,
-            height: svg_height,
-        }
-
-        this.colorScale = d3.scaleSequential(d3.interpolateRdBu)
-        //.domain([0, 5])
-
-        this.cloud = d3.layout.cloud();
-    }
-
-    update() {
-        this.svg.selectAll("*").remove()
-        this.datasetYear = this.dataset[this.year].slice(0, 50)
-
-        this.fontSizeScale = d3.scaleLinear()
-            .domain(d3.extent(this.datasetYear, this.sAccessor))
-            .range([0, this.dimensions.height])
-
-        this.layout = this.cloud
-            .size([this.dimensions.width, this.dimensions.height])
-            .words(this.datasetYear)
-            .padding(5)
-            .rotate(() => ~~(Math.random() * 2) * 45)
-            .font('Impact')
-            .fontSize(d => this.fontSizeScale(this.sAccessor(d)))
-            .on('end', this.draw.bind(this))
-
-        this.layout.start()
-    }
-
-    draw(words) {
-        this.svg
-            .append('g')
-            .attr('transform', 'translate(' + [0.5 * this.dimensions.width, 0.5 * this.dimensions.height] + ')')
-            .selectAll('text').data(words)
-            .enter().append('text')
-            .style('font-size', d => this.sAccessor(d) + 'px')
-            .style('fill', (d, i) => this.color)
-            .attr('text-anchor', 'middle')
-            .style('font-family', 'Impact')
-            .attr('transform', d => 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')')
-            .text(d => this.tAccessor(d))
-    }
-
-    setYear(year) {
-        this.year = year
+    updateFilters(female_director, male_director, female_actor, male_actor) {
+        this.female_director = female_director
+        this.male_director = male_director
+        this.female_actor = female_actor
+        this.male_actor = male_actor
         this.update()
     }
 }
 
+let scatter_plot = new ScatterPlot();
+
+let bar_plot = new BarPlot();
+
+let graph = new Graph();
+
+function networkButtonClick(_this) {
+    if (_this.classList.contains("active")) {
+        _this.classList.remove("active")
+    }
+    else {
+        _this.classList.add("active")
+    }
+    female_director = document.getElementById("femaleDirectorButton").classList.contains("active")
+    male_director = document.getElementById("maleDirectorButton").classList.contains("active")
+    female_actor = document.getElementById("femaleActorButton").classList.contains("active")
+    male_actor = document.getElementById("maleActorButton").classList.contains("active")
+    graph.updateFilters(female_director, male_director, female_actor, male_actor)
+}
+
+function reset_buttons() {
+    document.getElementById("femaleDirectorButton").classList.add("active")
+    document.getElementById("maleDirectorButton").classList.add("active")
+    document.getElementById("femaleActorButton").classList.add("active")
+    document.getElementById("maleActorButton").classList.add("active")
+}
 
 
 whenDocumentLoaded(() => {
@@ -948,6 +1041,9 @@ whenDocumentLoaded(() => {
         sliderticks.appendChild(par)
     }
 
+
+
+
     Promise.all([
         d3.json("data/gender-representation.json"),
         d3.json("data/bar-chart.json"),
@@ -956,26 +1052,45 @@ whenDocumentLoaded(() => {
         d3.json("data/thematic-differences-female-lead.json"),
         d3.json("data/popular-movies.json")
     ]).then(function (files) {
-        scatter_plot = new ScatterPlot("wrapper-gender-representation", files[0]);
+        scatter_plot.initialize("wrapper-gender-representation", files[0]);
 
-        bar_plot = new BarPlot("wrapper-categories", files[1], files[5]);
+        bar_plot.initialize("wrapper-categories", files[1], files[5]);
 
-        graph = new Graph("wrapper-collaborations", files[2]);
+        graph.initialize("wrapper-collaborations", files[2]);
 
-        male_cloud = new WordCloud("male-cloud", files[3], "#377eb8");
+        const scatterCheckbox = document.getElementById("scatterCheckbox")
 
-        female_cloud = new WordCloud("female-cloud", files[4], "#e41a1c");
+        scatterCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                scatter_plot.setColorSelector('director')
+            }
+            else {
+                scatter_plot.setColorSelector('actor')
+            }
+        })
+
+        const barCheckbox = document.getElementById("barCheckbox")
+
+        barCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                bar_plot.setRole('director')
+            }
+            else {
+                bar_plot.setRole('actor')
+            }
+        })
 
         function update_years() {
+            //reset_buttons()
             scatter_plot.setYear(range.value)
             bar_plot.setYear(range.value)
             graph.setYear(range.value)
-            male_cloud.setYear(range.value)
-            female_cloud.setYear(range.value)
 
         }
         range.addEventListener('input', update_years);
         update_years()
+
+
 
     })
 });

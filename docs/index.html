@@ -14,11 +14,18 @@
   <!-- Material Design Bootstrap -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.16.0/css/mdb.min.css" rel="stylesheet">
 
+  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
+
   <title>COM-480 Data Visualization</title>
 
   <style>
-    body {
+    body,
+    html {
+      height: 100%;
       max-width: 100%;
+      overflow-x: hidden;
+      background-color: #F2F3F7;
     }
 
     .grid {
@@ -26,19 +33,20 @@
       grid-template: 430px 430px / auto 40%;
       grid-gap: 5px;
       padding: 5px;
-      background-color: #ffffff;
+      background-color: #eaeaea;
     }
 
     .module {
-      background: #eaeaea;
-      display: flex;
+      position: relative;
+      background: white;
       align-items: center;
       justify-content: center;
-      padding: 0;
-      margin: 0;
-      position: relative;
-      width: 100%;
       height: 100%;
+      border-radius: 5px;
+
+      -webkit-box-shadow: 0px 0px 10px 1px rgba(199, 199, 199, 0.9);
+      -moz-box-shadow: 0px 0px 10px 1px rgba(199, 199, 199, 0.9);
+      box-shadow: 0px 0px 10px 1px rgba(199, 199, 199, 0.9);
     }
 
     .range-value {
@@ -81,11 +89,16 @@
       appearance: none;
       width: 100%;
       height: 25px;
-      background: #D3D3D3;
+      background: rgb(252, 252, 252);
       outline: none;
       opacity: 0.7;
       -webkit-transition: .2s;
       transition: opacity .2s;
+      border-radius: 5px;
+
+      -webkit-box-shadow: 0px 0px 10px 3px rgba(199, 199, 199, 0.9);
+      -moz-box-shadow: 0px 0px 10px 3px rgba(199, 199, 199, 0.9);
+      box-shadow: 0px 0px 10px 3px rgba(199, 199, 199, 0.9);
     }
 
     .slider:hover {
@@ -151,12 +164,11 @@
 
 
     /* Position and style the close button (top right corner) */
-    .sidebar .closebtn {
+    .closebtn {
       position: absolute;
-      top: 0;
-      right: 25px;
+      top: -5px;
+      right: 20px;
       font-size: 36px;
-      margin-left: 50px;
       color: black;
     }
 
@@ -181,39 +193,255 @@
       border-radius: 5px;
       pointer-events: none;
     }
+
+    .radio-inline {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    /* Style buttons */
+    .button {
+      background-color: white;
+      /* Blue background */
+      border: none;
+      /* Remove borders */
+      color: blue;
+      /* White text */
+      padding: 6px 8px;
+      /* Some padding */
+      font-size: 16px;
+      /* Set a font size */
+      cursor: pointer;
+      /* Mouse pointer on hover */
+      border-radius: 7px;
+      border: 1.5px solid #eaeaea;
+    }
+
+    .femaleButton.active {
+      border: 1.5px solid #e41a1c;
+    }
+
+    .maleButton.active {
+      border: 1.5px solid #377eb8;
+    }
+
+    .button:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    .button * {
+      pointer-events: none;
+    }
+
+    /* The switch - the box around the slider */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 58px;
+      height: 30px;
+      bottom: 0;
+      background-color: #F2F3F7;
+      border-radius: 34px;
+      -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+      -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The slider */
+    .sliderSwitch {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #F2F3F7;
+      -webkit-transition: .4s;
+      transition: .4s;
+
+    }
+
+    .sliderSwitch:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      background-color: #F2F3F7;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input+.sliderSwitch+.sliderSwitch {
+      opacity: 0;
+
+    }
+
+    input:checked+.sliderSwitch,
+    input:checked+.sliderSwitch+.sliderSwitch {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+
+    }
+
+    input:checked+.sliderSwitch,
+    input:checked+.sliderSwitch+.sliderSwitch {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    input:checked+.sliderSwitch {
+      opacity: 0;
+    }
+
+    input:checked+.sliderSwitch+.sliderSwitch {
+      opacity: 1;
+    }
+
+    .popup {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background-color: white;
+      border-radius: 5px;
+    }
+
   </style>
 
 </head>
 
 <body>
-  <div id="infoSidebar" class="sidebar">
-    <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
 
+  <nav class="navbar navbar-dark" style="background-color: #545E75;">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Gender in Movies</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mw-100" style="height: 85%; padding-top: 10px; width:100%; padding-bottom: 10px">
+    <div class="row h-100">
+      <div class="col-lg" style="position: relative;">
+        <div class="module" id="wrapper-gender-representation">
+          <svg class="plot-overlay" width="98%" height="98%"></svg>
+          <div style="position: relative; bottom:27px; left:10px;  padding-top: 3px; ">
+            <label class="switch">
+              <input type="checkbox" id="scatterCheckbox">
+              <img class="sliderSwitch" src="actor.png"
+                style="position: absolute; height:26px; border-radius: 50%; top: 2px; left: 2px">
+              <img class="sliderSwitch" src="director.png"
+                style="position: absolute; height:26px; border-radius: 50%; top: 2px; left: 2px;">
+              <!-- <img class="sliderSwitch" src="male_director.png" style="position: absolute; height:26px; border-radius: 50%; top: 2px; left: 2px;"> -->
+            </label>
+
+          </div>
+          <div id="scatterPopup" class="popup"></div>
+        </div>
+      </div>
+      <div class="col-lg" style="padding-left: 0px;">
+        <div class="row w-100 m-0" style="height:50%;">
+          <div class="module w-100" id="wrapper-collaborations" style="position: relative">
+            <svg width="98%" height="98%"></svg>
+            <div style="position: absolute; bottom:3px; left:3px;  padding-top: 3px; ">
+              <button onclick="networkButtonClick(this)" class="button femaleButton active"
+                id="femaleDirectorButton"><img src="female_director.png" style="width:20px;"></button>
+              <button onclick="networkButtonClick(this)" class="button femaleButton active" id="femaleActorButton"><img
+                  src="female_actor.png" style="width:20px;"></button>
+              <button onclick="networkButtonClick(this)" class="button maleButton active" id="maleDirectorButton"><img
+                  src="male_director.png" style="width:20px;"></button>
+              <button onclick="networkButtonClick(this)" class="button maleButton active" id="maleActorButton"><img
+                  src="male_actor.png" style="width:20px;"></button>
+            </div>
+            <div id="graphPopup" class="popup"></div>
+          </div>
+        </div>
+        <div class="row w-100 m-0" style="height:50%; padding-top: 15px ; position: relative;">
+          <div class="module w-100" id="wrapper-categories">
+            <svg width="98%" height="98%"></svg>
+            <div style="position: relative; bottom:35px; left:10px;  padding-top: 3px; ">
+              <label class="switch">
+                <input type="checkbox" id="barCheckbox">
+                <img class="sliderSwitch" src="actor.png"
+                  style="position: absolute; height:26px; border-radius: 50%; top: 2px; left: 2px">
+                <img class="sliderSwitch" src="director.png"
+                  style="position: absolute; height:26px; border-radius: 50%; top: 2px; left: 2px;">
+                <!-- <img class="sliderSwitch" src="male_director.png" style="position: absolute; height:26px; border-radius: 50%; top: 2px; left: 2px;"> -->
+              </label>
+            </div>
+            <div id="barPopup" class="popup"></div>
+          </div>
+
+          <!-- <div style="height:10%; width:100%; background-color:#eaeaea; text-align: center; padding-bottom:5px">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="genres" checked>
+              <label class="form-check-label" for="inlineRadio1">Genre</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="productionCompanies">
+              <label class="form-check-label" for="inlineRadio2">Company</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="productionCountries">
+              <label class="form-check-label" for="inlineRadio3">Country</label>
+            </div>
+          </div> -->
+
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="grid">
+  <div class="container mw-100" style="padding-top: 10px; width:100%">
+    <div class="row h-100">
+      <div class="col-lg">
+        <form class="range-field" style="width: 100%">
+          <input id="range" class="slider" type="range" min="1985" max="2020" , step="1" style="width: 100%" />
+          <div class="sliderticks">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-    <div class="module" id="wrapper-gender-representation"><svg class="plot-overlay" preserveAspectRatio="xMidYMid meet"
-        width="98%" height="98%"></svg></div>
-    <div class="module" id="wrapper-collaborations"><svg class="plot-overlay" preserveAspectRatio="xMidYMid meet"
-        width="98%" height="98%"></svg></div>
-    <div class="module" id="wrapper-categories"><svg class="plot-overlay" preserveAspectRatio="xMidYMid meet"
-        width="98%" height="98%"></svg></div>
+
+
+  <!-- <div class="grid">
+
+    <div class="module" id="wrapper-gender-representation">
+      <svg class="plot-overlay" preserveAspectRatio="xMidYMid meet"width="98%" height="98%"></svg>
+    </div>
+    <div class="module" id="wrapper-collaborations">
+      <svg class="plot-overlay" preserveAspectRatio="xMidYMid meet" width="98%" height="98%"></svg>
+    </div>
+    <div class="module" id="wrapper-categories">
+      <svg class="plot-overlay" preserveAspectRatio="xMidYMid meet"width="98%" height="98%"></svg>
+    </div>
     <div class="module" id="wrapper-wordcloud">
       <svg class="plot-overlay" id="male-cloud" width="50%" height="90%"></svg>
-      <svg class="plot-overlay" id="female-cloud" width="50%" height="90%"></svg></div>
+      <svg class="plot-overlay" id="female-cloud" width="50%" height="90%"></svg>
+    </div>
 
-  </div>
+  </div> -->
 
-  <div class="d-flex justify-content-left my-1 pl-4 pr-4">
-    <!-- <div class="range-value" id="rangeV"></div> -->
+  <!-- <div class="d-flex justify-content-left my-1 pl-4 pr-4">
     <form class="range-field" style="width: 100%">
-      <!-- <input id="range" class="custom-range" type="range" min="2000" max="2020" , step="1" /> -->
       <input id="range" class="slider" type="range" min="2000" max="2020" , step="1" style="width: 100%" />
       <div class="sliderticks">
       </div>
     </form>
-  </div>
+  </div> -->
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -246,6 +474,7 @@
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
   <script src="src/themoviedb.js"></script>
   <script src="src/index.js"></script>
 </body>
