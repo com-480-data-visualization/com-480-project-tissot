@@ -30,7 +30,7 @@
       height: 100%;
       max-width: 100%;
       overflow-x: hidden;
-      background-color: #F2F3F7;  
+      background-color: #F2F3F7;
     }
 
     .grid {
@@ -321,6 +321,70 @@
       background-color: white;
       border-radius: 5px;
     }
+
+    .autocomplete {
+      position: relative;
+      display: inline-block;
+      width: 20%;
+    }
+
+    input {
+      border: 1px solid transparent;
+      background-color: #eaeaea;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 30px;
+      outline: none;
+      z-index: 99;
+    }
+
+    input[type=text] {
+      background-color: #eaeaea;
+      width: 100%;
+    }
+
+
+    input[type=submit] {
+      background-color: #eaeaea;
+      cursor: pointer;
+    }
+
+    .autocomplete-items {
+      position: absolute;
+      z-index: 99;
+      /*position the autocomplete items to be the same width as the container:*/
+      top: 100%;
+      left: 0;
+      right: 0;
+    }
+
+    .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      background-color: #fff;
+    }
+
+    /*when hovering an item:*/
+    .autocomplete-items div:hover {
+      background-color: #eaeaea;
+    }
+
+    /*when navigating through the items using the arrow keys:*/
+    .autocomplete-active {
+      background-color: #eaeaea !important;
+    }
+
+    .selectedMale {
+      outline: 5px solid #f4c20d;
+    }
+
+    .selectedFemale {
+      outline: 5px solid #f4c20d;
+    }
+
+    .nonSelected {
+      outline: none;
+    }
   </style>
 
 </head>
@@ -330,7 +394,8 @@
   <nav class="navbar navbar-dark" style="background-color: #545E75;">
     <div class="container-fluid" style="width: 100%">
       <div class="navbar-header" style="width: 37%; margin: 0 auto;">
-        <a class="navbar-brand" href="#" style="line-height: 20px; font-size: 50px; font-family: ACFilmstrip;">Gender in Movies</a>
+        <a class="navbar-brand" href="#" style="line-height: 20px; font-size: 50px; font-family: ACFilmstrip;">Gender in
+          Movies</a>
       </div>
     </div>
   </nav>
@@ -357,7 +422,15 @@
       <div class="col-lg" style="padding-left: 0px;">
         <div class="row w-100 m-0" style="height:50%;">
           <div class="module w-100" id="wrapper-collaborations" style="position: relative">
-            <svg width="98%" height="98%"></svg>
+            <svg width="90%" height="98%" style="position: absolute; left:5%"></svg>
+            <form autocomplete="off" action="/action_page.php"
+              style="position: absolute; top:3px; left:3px;  padding-top: 3px; height:10px">
+              <div class="autocomplete" style="min-width: 20ch; height: 30px;">
+                <input id="myInput" type="text" name="myCountry" placeholder="Search"
+                  style="width: 20ch; height: 30px;">
+              </div>
+            </form>
+
             <div style="position: absolute; bottom:3px; left:3px;  padding-top: 3px; ">
               <button onclick="networkButtonClick(this)" class="button femaleButton active"
                 id="femaleDirectorButton"><img src="female_director.png" style="width:20px;"></button>

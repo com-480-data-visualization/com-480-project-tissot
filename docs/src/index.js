@@ -7,6 +7,131 @@ function whenDocumentLoaded(action) {
     }
 }
 
+let selected_name = ""
+let selected_movie = null
+let selected_poster = null
+
+function autocomplete(inp, arr) {
+    /*the autocomplete function takes two arguments,
+    the text field element and an array of possible autocompleted values:*/
+    var currentFocus;
+    /*execute a function when someone writes in the text field:*/
+    inp.addEventListener("input", function (e) {
+        selected_name = ""
+        var a, b, i, val = this.value;
+        /*close any already open lists of autocompleted values*/
+        closeAllLists();
+        if (!val) { return false; }
+        currentFocus = -1;
+        /*create a DIV element that will contain the items (values):*/
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        /*append the DIV element as a child of the autocomplete container:*/
+        this.parentNode.appendChild(a);
+        /*for each item in the array...*/
+        const max_show = 15
+        let shown = 0
+        input_field = this
+        for (i = 0; i < arr.length; i++) {
+            /*check if the item starts with the same letters as the text field value:*/
+            //   if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase() && shown < max_show) {
+            if (arr[i].toUpperCase().includes(val.toUpperCase()) && shown < max_show) {
+                /*create a DIV element for each matching element:*/
+                b = document.createElement("DIV");
+                /*make the matching letters bold:*/
+                indexOfSubstring = arr[i].toUpperCase().indexOf(val.toUpperCase())
+                console.log(arr[i])
+                console.log(arr[i].substr(0, indexOfSubstring))
+                console.log(arr[i].substr(indexOfSubstring, val.length))
+                console.log(arr[i].substr(indexOfSubstring + val.length))
+                b.innerHTML = arr[i].substr(0, indexOfSubstring);
+                b.innerHTML += "<strong>" + arr[i].substr(indexOfSubstring, val.length) + "</strong>";
+                b.innerHTML += arr[i].substr(indexOfSubstring + val.length);
+                /*insert a input field that will hold the current array item's value:*/
+                b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                /*execute a function when someone clicks on the item value (DIV element):*/
+                b.addEventListener("click", function (e) {
+                    /*insert the value for the autocomplete text field:*/
+                    inp.value = this.getElementsByTagName("input")[0].value;
+                    selected_name = inp.value
+                    console.log(inp.value.length)
+                    input_field.style.width = Math.max(inp.value.length, 20) + "ch"
+                    input_field.blur()
+                    graph.update()
+                    /*close the list of autocompleted values,
+                    (or any other open lists of autocompleted values:*/
+                    closeAllLists();
+                });
+                a.appendChild(b);
+                shown++;
+            }
+        }
+    });
+    /*execute a function presses a key on the keyboard:*/
+    inp.addEventListener("keydown", function (e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode == 40) {
+            /*If the arrow DOWN key is pressed,
+            increase the currentFocus variable:*/
+            currentFocus++;
+            /*and and make the current item more visible:*/
+            addActive(x);
+        } else if (e.keyCode == 38) { //up
+            /*If the arrow UP key is pressed,
+            decrease the currentFocus variable:*/
+            currentFocus--;
+            /*and and make the current item more visible:*/
+            addActive(x);
+        } else if (e.keyCode == 13) {
+            /*If the ENTER key is pressed, prevent the form from being submitted,*/
+            e.preventDefault();
+            if (currentFocus > -1) {
+                /*and simulate a click on the "active" item:*/
+                if (x) x[currentFocus].click();
+                selected_name = currentFocus
+            }
+        }
+    });
+    function addActive(x) {
+        /*a function to classify an item as "active":*/
+        if (!x) return false;
+        /*start by removing the "active" class on all items:*/
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        /*add class "autocomplete-active":*/
+        x[currentFocus].classList.add("autocomplete-active");
+    }
+    function removeActive(x) {
+        /*a function to remove the "active" class from all autocomplete items:*/
+        for (var i = 0; i < x.length; i++) {
+            x[i].classList.remove("autocomplete-active");
+        }
+    }
+    function closeAllLists(elmnt) {
+        /*close all autocomplete lists in the document,
+        except the one passed as an argument:*/
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+            if (elmnt != x[i] && elmnt != inp) {
+                x[i].parentNode.removeChild(x[i]);
+            }
+        }
+    }
+    /*execute a function when someone clicks in the document:*/
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+    });
+
+    inp.addEventListener("focus", function (e) {
+        this.value = ""
+        selected_name = ""
+        graph.update()
+    })
+}
+
 let yearStart = 1990
 let yearEnd = 2021
 let releaseYears = Array(yearEnd - yearStart + 1)
@@ -96,12 +221,35 @@ function openNavMovie(movie_info, credits_info, video_info) {
     el.style.textAlign = "justify"
 
     director_name = credits_info['crew'].filter(d => d.job == 'Director')[0].name
-    insertNavElement('director', 'p', "<b>Director:</b> " + director_name, summary_wrapper, "10px")
+    el = insertNavElement('director', 'p', "<b>Director:</b> " + director_name, summary_wrapper, "10px")
+
+    el.addEventListener("click", function(elem) {
+        selected_name = director_name
+        inp = document.getElementById("myInput");
+        inp.value = director_name
+        inp.style.width = Math.max(inp.value.length, 20) + "ch"
+        inp.blur()
+        graph.update()
+    })
+    el.style.cursor = "pointer"
+
+
 
     summary_wrapper.appendChild(document.createElement("br"))
 
     leading_star_name = credits_info['cast'][0].name
-    element = insertNavElement('star', 'p', "<b>Main star:</b> " + leading_star_name, summary_wrapper, "0px")
+    el = insertNavElement('star', 'p', "<b>Main star:</b> " + leading_star_name, summary_wrapper, "0px")
+
+    el.addEventListener("click", function(elem) {
+        selected_name = leading_star_name
+        inp = document.getElementById("myInput");
+        inp.value = leading_star_name
+        inp.style.width = Math.max(inp.value.length, 20) + "ch"
+        inp.blur()
+        graph.update()
+    })
+
+    el.style.cursor = "pointer"
 
     // insert trailer
     let video_trailer = document.getElementById('video_trailer')
@@ -248,7 +396,25 @@ function listNav(ids, genre, gender, role) {
                 link.style.height = "250px"
                 link.style.width = "170px"
                 wrapper.appendChild(link)
-                link.style.paddingRight = "10px"
+                link.style.marginRight = "5px"
+                link.id = element + "-poster"
+                link.addEventListener("click", function(elem){
+                    if (selected_movie) {
+                        selected_movie.style.strokeWidth = "0"
+                        selected_poster.style.border = "none"
+                    }
+                    selected_movie = document.getElementById(this.id.split("-")[0])
+                    selected_movie.style.stroke = "#f4c20d"
+                    selected_movie.style.strokeWidth = "5"
+                    this.style.border = "4px solid #f4c20d"
+                    selected_poster = this
+                    
+                })
+
+                link.addEventListener("dblclick", function(elem){
+                    selected_movie = document.getElementById(this.id.split("-")[0])
+                    selected_movie.dispatchEvent(new Event('click')); 
+                })
 
             },
             () => { console.log("f") })
@@ -271,6 +437,10 @@ function closeNavActor() {
 function closeNavBar() {
     document.getElementById("barPopup").style.width = "0";
     document.getElementById("barPopup").innerHTML = ""
+    if (selected_movie) {
+        selected_movie.style.strokeWidth = "0"
+        selected_poster.style.border = "none"
+    }
 }
 
 function scatter_click(d) {
@@ -445,6 +615,7 @@ class ScatterPlot {
 
         dots.enter()
             .append("circle")
+            .attr("id", d => d.id)
             .on("click", function (d) { scatter_click(d) })
             .on('mouseover', function (d) {
                 let offset = getOffset(this)
@@ -677,11 +848,11 @@ class BarPlot {
             .data(this.stackedData)
             .enter()
             .append("g")
-                .attr("fill", function (d) { return fill(d.key); })
-                .selectAll("rect")
+            .attr("fill", function (d) { return fill(d.key); })
+            .selectAll("rect")
 
         var div = d3.select("body").append("div")
-            .attr("class", "tooltip")   
+            .attr("class", "tooltip")
             .style("opacity", 0);
 
         // enter a second time = loop subgroup per subgroup to add all rectangles
@@ -780,6 +951,7 @@ class Graph {
         const svg_width = Number(this.svg.style("width").slice(0, -2))
         const svg_height = Number(this.svg.style("height").slice(0, -2))
 
+
         this.dimensions = {
             width: svg_width,
             height: svg_height,
@@ -789,6 +961,8 @@ class Graph {
         this.female_director = true
         this.male_actor = true
         this.female_actor = true
+        let names = Array.from(new Set(Object.values(this.dataset).map(x => x.nodes).flat().map(x => x.id.split(',')[0])))
+        autocomplete(document.getElementById("myInput"), names);
     }
 
     update() {
@@ -843,12 +1017,13 @@ class Graph {
 
         this.link = this.wrapper.append("g")
             .attr("stroke", "#000")
-            .attr("stroke-opacity", 0.2)
+            .attr("stroke-opacity", 0.5)
             .selectAll("line")
 
         this.link = this.link.data(this.links)
             .enter().append("line")
-            .attr("stroke-width", d => this.lineWidthScale(this.lineWidthAccessor(d)))
+            // .attr("stroke-width", d => this.lineWidthScale(this.lineWidthAccessor(d)))
+            .attr("stroke-width", 3)
 
 
         this.simulation = d3.forceSimulation()
@@ -869,10 +1044,11 @@ class Graph {
             .attr("class", "tooltip")
             .style("opacity", 0);
         this.node = this.node.data(this.nodes)
-            .enter()//.append("rect")
+            .enter()
             .append("image")
             .attr("xlink:href", function (d) {
                 if (d.isDirector) {
+                    console.log(d.id.split(",")[0])
                     if (d.gender == 'Male') {
                         return "male_director.png"
                     }
@@ -892,10 +1068,12 @@ class Graph {
             })
             .on("click", function (d) { network_click(d) })
             .attr("x", -10).attr("y", -10)
-            .attr("width", 20).attr("height", 20)
+            .attr("width", 20)
+            .attr("height", 20)
             .attr("rx", d => this.radius(this.radiusAccessor(d)) * 10)
             .attr("fill", d => fill(this.colorAccessor(d)))
             .attr("class", d => d.isDirector ? 'director' : 'actor')
+            .attr("class", d => d.id.split(",")[0] == selected_name ? (d.gender == 'Male' ? 'selectedMale' : 'selectedFemale') : 'nonSelected')
             .on('mouseover', function (d) {
                 let offset = getOffset(this)
                 let new_cx = offset.left - 50
