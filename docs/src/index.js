@@ -10,6 +10,7 @@ function whenDocumentLoaded(action) {
 let selected_name = ""
 let selected_movie = null
 let selected_poster = null
+let selected_person = null
 
 function autocomplete(inp, arr) {
     /*the autocomplete function takes two arguments,
@@ -326,7 +327,8 @@ function openNavActor(actor_info) {
     genders = ["Male", "Female"]
 
     // insert name
-    insertNavElement('header_actor', 'h2', actor_info['name'] ? actor_info['name'] : '/', summary_wrapper)
+    actor_name = actor_info['name'] ? actor_info['name'] : '/'
+    insertNavElement('header_actor', 'h2', actor_name, summary_wrapper)
     summary_wrapper.appendChild(document.createElement("br"))
 
     // insert birthday
@@ -433,6 +435,11 @@ function listNav(ids, genre, gender, role) {
 function closeNavActor() {
     document.getElementById("graphPopup").style.width = "0";
     document.getElementById("graphPopup").innerHTML = ""
+    if (selected_person){
+        d3.selectAll(selected_person).attr("stroke-width", "0")
+    }
+    selected_person = null
+    
 }
 
 function closeNavBar() {
@@ -463,6 +470,10 @@ function scatter_click(d) {
 }
 
 function network_click(d) {
+    classname = d.id.split(",")[0].replace(/[^a-z]/gi, '')
+    classname = "."+classname
+    d3.selectAll(classname).attr("stroke-width", "5").attr("stroke", "#f4c20d")
+    selected_person = classname
     theMovieDb.people.getById({ 'id': d.tmdbId },
         (r) => {
             actor_info = JSON.parse(r)
@@ -614,6 +625,20 @@ class ScatterPlot {
             .attr("fill", d => fill(this.cAccessor(d)))
             .attr("r", d => this.rScale(this.rAccessor(d)))
             .attr("id", d => d.id)
+            .attr("stroke-width", d => {
+                if (!selected_person){
+                    return "0"
+                }
+                if (d.nameLead.replace(/[^a-z]/gi, '') == selected_person.slice(1)  || d.nameDirector.replace(/[^a-z]/gi, '') == selected_person.slice(1)){
+                    return "5"
+                }
+                else {
+                    return "0"
+                }
+            })
+            .attr("class", d => d.nameLead.replace(/[^a-z]/gi, '') + " " + d.nameDirector.replace(/[^a-z]/gi, ''))
+            .attr("stroke", "#f4c20d")
+        
 
         dots.enter()
             .append("circle")
@@ -665,6 +690,19 @@ class ScatterPlot {
             .attr("fill", d => fill(this.cAccessor(d)))
             .transition(t)
             .attr("r", d => this.rScale(this.rAccessor(d)))
+            .attr("class", d => d.nameLead.replace(/[^a-z]/gi, '') + " " + d.nameDirector.replace(/[^a-z]/gi, ''))
+            .attr("stroke", "#f4c20d")
+            .attr("stroke-width", d => {
+                if (!selected_person){
+                    return "0"
+                }
+                if (d.nameLead.replace(/[^a-z]/gi, '') == selected_person.slice(1)  || d.nameDirector.replace(/[^a-z]/gi, '') == selected_person.slice(1)){
+                    return "5"
+                }
+                else {
+                    return "0"
+                }
+            })
     }
 
     setYear(year) {
@@ -1051,7 +1089,7 @@ class Graph {
             .append("image")
             .attr("xlink:href", function (d) {
                 if (d.isDirector) {
-                    console.log(d.id.split(",")[0])
+                    // console.log(d.id.split(",")[0])
                     if (d.gender == 'Male') {
                         return "male_director.png"
                     }
