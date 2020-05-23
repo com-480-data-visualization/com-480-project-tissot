@@ -403,6 +403,8 @@ function listNav(ids, genre, gender, role) {
                         selected_movie.style.strokeWidth = "0"
                         selected_poster.style.border = "none"
                     }
+                    console.log(this.id)
+                    console.log(this.id.split("-")[0])
                     selected_movie = document.getElementById(this.id.split("-")[0])
                     selected_movie.style.stroke = "#f4c20d"
                     selected_movie.style.strokeWidth = "5"
@@ -422,7 +424,6 @@ function listNav(ids, genre, gender, role) {
 
     sidebar.style.width = "100%";
     sidebar.style.height = "100%";
-    link.style.paddingLeft = "25px";
     sidebar.style.top = "0"
     sidebar.style.left = "";
     sidebar.style.right = "0";
@@ -612,12 +613,14 @@ class ScatterPlot {
             .attr("cy", d => this.yScale(this.yAccessor(d)))
             .attr("fill", d => fill(this.cAccessor(d)))
             .attr("r", d => this.rScale(this.rAccessor(d)))
+            .attr("id", d => d.id)
 
         dots.enter()
             .append("circle")
             .attr("id", d => d.id)
             .on("click", function (d) { scatter_click(d) })
             .on('mouseover', function (d) {
+                console.log(d.id)
                 let offset = getOffset(this)
                 let new_cx = offset.left
                 let new_cy = offset.top - 40
