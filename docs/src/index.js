@@ -393,10 +393,10 @@ function listNav(ids, genre, gender, role) {
                 link.style.display = "inline-block"
                 link.className = "poster"
 
-                link.style.height = "250px"
-                link.style.width = "170px"
+                // link.style.height = "250px"
+                link.style.width = "19%"
                 wrapper.appendChild(link)
-                link.style.marginRight = "5px"
+                link.style.marginRight = "1%"
                 link.id = element + "-poster"
                 link.addEventListener("click", function(elem){
                     if (selected_movie) {
