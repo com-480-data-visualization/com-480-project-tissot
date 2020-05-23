@@ -905,7 +905,7 @@ class BarPlot {
 
         this.bounds.selectAll("rect")
             .transition("barFadeIn")
-            .duration(1000)
+            .duration(2000)
             .attr("height", yScale.bandwidth())
             .attr("y", function (d) { return yScale(d.data.group); })
     }
