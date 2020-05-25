@@ -278,7 +278,7 @@ function closeNavMovie() {
     document.getElementById("scatterPopup").innerHTML = ""
 }
 
-function openNavActor(actor_info) {
+function openNavActor(actor_info, d) {
     url_path = actor_info['profile_path']
 
     if (url_path == null) {
@@ -340,7 +340,7 @@ function openNavActor(actor_info) {
     summary_wrapper.appendChild(document.createElement("br"))
 
     // insert gender
-    insertNavElement('gender', 'p', "<b>Gender:</b> " + (genders[actor_info['gender']] ? genders[actor_info['gender']] : '/'), summary_wrapper, "0px")
+    insertNavElement('gender', 'p', "<b>Gender:</b> " + (d.gender ? d.gender : '/'), summary_wrapper, "0px")
     summary_wrapper.appendChild(document.createElement("br"))
 
     // insert biography
@@ -477,7 +477,7 @@ function network_click(d) {
     theMovieDb.people.getById({ 'id': d.tmdbId },
         (r) => {
             actor_info = JSON.parse(r)
-            openNavActor(actor_info)
+            openNavActor(actor_info, d)
         },
         () => { console.log("f") })
 }
