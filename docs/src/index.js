@@ -7,11 +7,18 @@ function whenDocumentLoaded(action) {
     }
 }
 
+// variables for storing selected people and movies across years
 let selected_name = ""
 let selected_movie = null
 let selected_poster = null
 let selected_person = null
+// placehholder image shown when a person's image is missing
+let no_img_src = "no-photo-available.jpg"
+// filling function used in all visualizations
+const fill = gender => gender == "Male" ? "#377eb8" : (gender == "Female" ? "#e41a1c" : "#000000")
 
+
+//Search autocomplete functionality
 function autocomplete(inp, arr) {
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
@@ -35,8 +42,7 @@ function autocomplete(inp, arr) {
         let shown = 0
         input_field = this
         for (i = 0; i < arr.length; i++) {
-            /*check if the item starts with the same letters as the text field value:*/
-            //   if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase() && shown < max_show) {
+            /*check if the item contains the same letters as the text field value:*/
             if (arr[i].toUpperCase().includes(val.toUpperCase()) && shown < max_show) {
                 /*create a DIV element for each matching element:*/
                 b = document.createElement("DIV");
@@ -53,7 +59,8 @@ function autocomplete(inp, arr) {
                 b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
                 /*execute a function when someone clicks on the item value (DIV element):*/
                 b.addEventListener("click", function (e) {
-                    /*insert the value for the autocomplete text field:*/
+                    /*insert the value for the autocomplete text field 
+                    and store the name of the selected person: */
                     inp.value = this.getElementsByTagName("input")[0].value;
                     selected_name = inp.value
                     console.log(inp.value.length)
@@ -125,7 +132,8 @@ function autocomplete(inp, arr) {
     document.addEventListener("click", function (e) {
         closeAllLists(e.target);
     });
-
+    
+    // clear the input field when a user clicks on it
     inp.addEventListener("focus", function (e) {
         this.value = ""
         selected_name = ""
@@ -133,25 +141,7 @@ function autocomplete(inp, arr) {
     })
 }
 
-let yearStart = 1990
-let yearEnd = 2021
-let releaseYears = Array(yearEnd - yearStart + 1)
-    .fill()
-    .map(() => yearStart++)
-
-function getRandomReleaseYear() {
-    const releaseYear = releaseYears[Math.floor(Math.random() * releaseYears.length)]
-    return releaseYear
-}
-
-no_img_src = "no-photo-available.jpg"
-
-const releaseYear = 2019 // getRandomReleaseYear()
-
-const fill = gender => gender == "Male" ? "#377eb8" : (gender == "Female" ? "#e41a1c" : "#000000")
-
-let nav_clicked = false
-
+// helper function for inserting elements to the details view
 function insertNavElement(element_id, element_type, content, parent, padTop = "30px") {
     let element = document.getElementById(element_id)
     if (element) { element.remove() }
@@ -166,6 +156,7 @@ function insertNavElement(element_id, element_type, content, parent, padTop = "3
     return element
 }
 
+// function for opening the details view in the scatter plot
 function openNavMovie(movie_info, credits_info, video_info) {
 
     url_path = movie_info['poster_path']
@@ -221,9 +212,11 @@ function openNavMovie(movie_info, credits_info, video_info) {
     el.style.paddingRight = "20px"
     el.style.textAlign = "justify"
 
+    // insert director
     director_name = credits_info['crew'].filter(d => d.job == 'Director')[0].name
     el = insertNavElement('director', 'p', "<b>Director:</b> " + director_name, summary_wrapper, "10px")
 
+    // select director in network if clicked
     el.addEventListener("click", function(elem) {
         selected_name = director_name
         inp = document.getElementById("myInput");
@@ -234,13 +227,13 @@ function openNavMovie(movie_info, credits_info, video_info) {
     })
     el.style.cursor = "pointer"
 
-
-
     summary_wrapper.appendChild(document.createElement("br"))
 
+    // insert main star
     leading_star_name = credits_info['cast'][0].name
     el = insertNavElement('star', 'p', "<b>Main star:</b> " + leading_star_name, summary_wrapper, "0px")
 
+    // select actor in network if clicked
     el.addEventListener("click", function(elem) {
         selected_name = leading_star_name
         inp = document.getElementById("myInput");
@@ -267,17 +260,20 @@ function openNavMovie(movie_info, credits_info, video_info) {
 
     sidebar.appendChild(video_trailer)
 
+    // style the view
     sidebar.style.width = "100%";
     sidebar.style.height = "100%";
     link.style.paddingLeft = "25px"
     sidebar.style.top = "0"
 }
 
+// function for closing the details view in the scatter plot
 function closeNavMovie() {
     document.getElementById("scatterPopup").style.width = "0";
     document.getElementById("scatterPopup").innerHTML = ""
 }
 
+// function for opening the details view in the network plot
 function openNavActor(actor_info, d) {
     url_path = actor_info['profile_path']
 
@@ -346,6 +342,7 @@ function openNavActor(actor_info, d) {
     // insert biography
     insertNavElement('popularity', 'p', "<b>Popularity:</b> " + (actor_info['popularity'] ? actor_info['popularity'] : '/'), summary_wrapper, "0px")
 
+    // style the view
     sidebar.style.width = "100%";
     sidebar.style.height = "100%";
     link.style.paddingLeft = "25px";
@@ -354,7 +351,18 @@ function openNavActor(actor_info, d) {
     sidebar.style.right = "0";
 }
 
+// function for closing the details view in the network plot
+function closeNavActor() {
+    document.getElementById("graphPopup").style.width = "0";
+    document.getElementById("graphPopup").innerHTML = ""
+    if (selected_person){
+        d3.selectAll(selected_person).attr("stroke-width", "0")
+    }
+    selected_person = null
+    
+}
 
+// function for opening the details view in the bar plot
 function listNav(ids, genre, gender, role) {
     sidebar = document.getElementById("barPopup")
     sidebar.innerHTML += '<a href="javascript:void(0)" class="closebtn" onclick="closeNavBar()">&times;</a>'
@@ -366,6 +374,7 @@ function listNav(ids, genre, gender, role) {
         }
     }
 
+    // insert the title
     const header = document.createElement("h2")
     header.innerText = "Top " + genre + " movies with " + gender + " " + role
     header.style.textAlign = "center"
@@ -373,6 +382,7 @@ function listNav(ids, genre, gender, role) {
     header.style.paddingTop = "20px"
     sidebar.appendChild(header)
 
+    // insert a wrapper and posters
     const wrapper = document.createElement("div")
     wrapper.style.paddingLeft = "20px"
     wrapper.style.paddingTop = "15px"
@@ -395,11 +405,12 @@ function listNav(ids, genre, gender, role) {
                 link.style.display = "inline-block"
                 link.className = "poster"
 
-                // link.style.height = "250px"
                 link.style.width = "19%"
                 wrapper.appendChild(link)
                 link.style.marginRight = "1%"
                 link.id = element + "-poster"
+
+                // select a movie in scatter plot if poster clicked
                 link.addEventListener("click", function(elem){
                     if (selected_movie) {
                         selected_movie.style.strokeWidth = "0"
@@ -415,6 +426,7 @@ function listNav(ids, genre, gender, role) {
                     
                 })
 
+                // open a details view in scatter plot on double click
                 link.addEventListener("dblclick", function(elem){
                     selected_movie = document.getElementById(this.id.split("-")[0])
                     selected_movie.dispatchEvent(new Event('click')); 
@@ -424,6 +436,7 @@ function listNav(ids, genre, gender, role) {
             () => { console.log("f") })
     });
 
+    // style the view
     sidebar.style.width = "100%";
     sidebar.style.height = "100%";
     sidebar.style.top = "0"
@@ -431,17 +444,7 @@ function listNav(ids, genre, gender, role) {
     sidebar.style.right = "0";
 }
 
-/* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
-function closeNavActor() {
-    document.getElementById("graphPopup").style.width = "0";
-    document.getElementById("graphPopup").innerHTML = ""
-    if (selected_person){
-        d3.selectAll(selected_person).attr("stroke-width", "0")
-    }
-    selected_person = null
-    
-}
-
+// function for closing the details view in the bar plot
 function closeNavBar() {
     document.getElementById("barPopup").style.width = "0";
     document.getElementById("barPopup").innerHTML = ""
@@ -451,6 +454,7 @@ function closeNavBar() {
     }
 }
 
+// function executed whenever a circle in the scatter plot is clicked
 function scatter_click(d) {
     theMovieDb.movies.getById(d,
         (r1) => {
@@ -469,6 +473,7 @@ function scatter_click(d) {
         () => { console.log("f") })
 }
 
+// function executed whenever a node in the network plot is clicked
 function network_click(d) {
     classname = d.id.split(",")[0].replace(/[^a-z]/gi, '')
     classname = "."+classname
@@ -482,6 +487,7 @@ function network_click(d) {
         () => { console.log("f") })
 }
 
+// helper function for getting the absoute position of a svg element in the page
 function getOffset(element) {
     var bound = element.getBoundingClientRect();
     var html = document.documentElement;
@@ -492,14 +498,15 @@ function getOffset(element) {
     };
 }
 
-
-
+// main class for the scatter plot visualization
 class ScatterPlot {
 
+    // empty constructor because we want to create the object first and provide the dataset when available
     constructor() {
 
     }
 
+    // initialize the dataset and the svg element
     initialize(figure_element_id, dataset) {
         this.dataset = dataset
         this.year = document.getElementById("range").value
@@ -593,6 +600,7 @@ class ScatterPlot {
         this.update()
     }
 
+    // function executed when the plot needs to be updated
     update() {
         const t = d3.transition().duration(2000)
 
@@ -705,11 +713,13 @@ class ScatterPlot {
             })
     }
 
+    // change the selected year
     setYear(year) {
         this.year = year
         this.update()
     }
 
+    // change the coloring role
     setColorSelector(role) {
         if (role == 'director') {
             this.cAccessor = d => d.genderDirector
@@ -729,6 +739,7 @@ class ScatterPlot {
 
     }
 
+    // function for implementing the brushing functionality
     brushended() {
         var s = d3.event.selection;
         if (!s) {
@@ -745,10 +756,12 @@ class ScatterPlot {
         this.zoom();
     }
 
+
     idled() {
         this.idleTimeout = null;
     }
 
+    // zooming functionality
     zoom() {
         const t = d3.transition().duration(2000)
         this.xAxis.transition().duration(2000).call(this.xAxisGenerator)
@@ -767,12 +780,15 @@ class ScatterPlot {
     }
 }
 
+// main class for the bar chart visualization
 class BarPlot {
 
+    // empty constructor because we want to create the object first and provide the dataset when available
     constructor() {
 
     }
 
+    // initialize the dataset and the svg element
     initialize(figure_element_id, dataset, popularity_dataset) {
         this.role = 'actor'
         this.dataset = dataset
@@ -855,6 +871,7 @@ class BarPlot {
         this.update()
     }
 
+    // function executed when the plot needs to be updated
     update() {
         const t = d3.transition().duration(1500)
 
@@ -903,7 +920,6 @@ class BarPlot {
             .on("click", d => this.onClick(this, d))
             .attr("y", function (d) { return yScale(d.data.group) + yScale.bandwidth(); })
             .attr("x", function (d) { return xScale(d[0]); })
-            //.attr("x", function (d) { if (d[0] == 0) { return xScale(d[0]); } else return xScale(d[1]); })
             .attr("width", function (d) { return xScale(d[1]) - xScale(d[0]); })
             .attr("height", 0)
             .on('mouseover', function (d) {
@@ -948,21 +964,24 @@ class BarPlot {
             .attr("y", function (d) { return yScale(d.data.group); })
     }
 
+    // change the year
     setYear(year) {
         this.year = year
         this.update()
     }
 
-
+    // change the coloring role
     setRole(role) {
         this.role = role
         this.update()
     }
 
+    // provide the data for the details view
     setPopularityData(data) {
         this.popularity_dataset = data
     }
 
+    // function executed when a bar is clicked
     onClick(object, d) {
         const selected_gender = d[0] == 0 & d[1] != 100 ? 'Female' : 'Male'
         const ids = object.popularity_dataset['genres'][object.year][d.data.group][this.role][selected_gender]
@@ -971,12 +990,15 @@ class BarPlot {
     }
 }
 
+// main class for the network visualization
 class Graph {
 
+    // empty constructor because we want to create the object first and provide the dataset when available
     constructor() {
 
     }
 
+    // initialize the dataset and the svg element
     initialize(figure_element_id, dataset) {
         this.dataset = dataset
 
@@ -1006,6 +1028,7 @@ class Graph {
         autocomplete(document.getElementById("myInput"), names);
     }
 
+    // function executed when the plot needs to be updated
     update() {
         this.svg.selectAll("*").remove()
         this.simulation = null
@@ -1171,6 +1194,7 @@ class Graph {
         this.simulation.force("link").links(this.links)
     }
 
+    // used for updating the force simulation
     ticked() {
         if (Date.now() < this.endTime) {
             const max_x = Math.max(...this.nodes.map(d => d.x))
@@ -1196,11 +1220,13 @@ class Graph {
         }
     }
 
+    // change the year
     setYear(year) {
         this.year = year
         this.update()
     }
 
+    // update the node filters
     updateFilters(female_director, male_director, female_actor, male_actor) {
         this.female_director = female_director
         this.male_director = male_director
@@ -1210,12 +1236,14 @@ class Graph {
     }
 }
 
+// initialize the three classes
 let scatter_plot = new ScatterPlot();
 
 let bar_plot = new BarPlot();
 
 let graph = new Graph();
 
+// function executed when one of the filter buttons in the graph is clicked
 function networkButtonClick(_this) {
     if (_this.classList.contains("active")) {
         _this.classList.remove("active")
@@ -1230,15 +1258,8 @@ function networkButtonClick(_this) {
     graph.updateFilters(female_director, male_director, female_actor, male_actor)
 }
 
-function reset_buttons() {
-    document.getElementById("femaleDirectorButton").classList.add("active")
-    document.getElementById("maleDirectorButton").classList.add("active")
-    document.getElementById("femaleActorButton").classList.add("active")
-    document.getElementById("maleActorButton").classList.add("active")
-}
-
-
 whenDocumentLoaded(() => {
+    // initialize the range slider
     const
         range = document.getElementById('range'),
         rangeV = document.getElementById('rangeV'),
@@ -1260,9 +1281,7 @@ whenDocumentLoaded(() => {
         sliderticks.appendChild(par)
     }
 
-
-
-
+    // load the datasets and initialize the three visualizations
     Promise.all([
         d3.json("data/gender-representation.json"),
         d3.json("data/bar-chart.json"),
@@ -1300,7 +1319,6 @@ whenDocumentLoaded(() => {
         })
 
         function update_years() {
-            //reset_buttons()
             scatter_plot.setYear(range.value)
             bar_plot.setYear(range.value)
             graph.setYear(range.value)
