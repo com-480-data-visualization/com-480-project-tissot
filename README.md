@@ -116,5 +116,14 @@ Our initial website can be accessed on this [link](https://com-480-data-visualiz
 
 **80% of the final grade**
 
-New [data](https://drive.google.com/file/d/1WDdEez1FRNRZaUgYwPCPXqmkx7_pDGKt/view?usp=sharing)
+### Data
+
+The TMDB data is stored in 7 partitions, with two tables per partition:
+- [Movies](https://drive.google.com/file/d/19OisQTXlxDY1RjKDj4kOe_j4Phu3HDdO/view?usp=sharing)
+- [Credits](https://drive.google.com/file/d/1tDah9EoY9FVZgaFtRKWk5zpdUP5Z_-ft/view?usp=sharing)
+
+After filtering, we have close to 500k movies in our initial [dataset](https://drive.google.com/file/d/14Utozg-lNKqXqBYmJLLvXtf3YmTwSpJj/view?usp=sharing).
+However, many of them are for adults, so we created additional [table](https://drive.google.com/file/d/1zvoQmKK0Ryd4d-32ElqsvhjczchWF5b6/view?usp=sharing) that indicates this.
+After joining the last two tables and filtering out movies that are for adults, we are left with 100k movies in our final [dataset](https://drive.google.com/file/d/1OzaZ_Ad2-_lOwwGvOGwXJ7or9DOlm9NU/view?usp=sharing).
+
 
