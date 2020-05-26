@@ -762,10 +762,10 @@ class ScatterPlot {
 
     // zooming functionality
     zoom() {
-        const t = d3.transition().duration(2000)
-        this.xAxis.transition().duration(2000).call(this.xAxisGenerator)
-        this.yAxis.transition().duration(2000).call(this.yAxisGenerator)
-        this.bounds.selectAll("circle").transition("zoomCircles").duration(2000)
+        const t = d3.transition().duration(1000)
+        this.xAxis.transition().duration(1000).call(this.xAxisGenerator)
+        this.yAxis.transition().duration(1000).call(this.yAxisGenerator)
+        this.bounds.selectAll("circle").transition("zoomCircles").duration(1000)
             .attr("cx", d => this.xScale(this.xAccessor(d)))
             .attr("cy", d => this.yScale(this.yAccessor(d)))
             .attr("r", d => {
