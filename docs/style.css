@@ -1,0 +1,365 @@
+@font-face {
+    font-family: ACFilmstrip;
+    src: url(ACFilmstrip.otf);
+  }
+
+  body,
+  html {
+    height: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    background-color: #F2F3F7;
+  }
+
+  .grid {
+    display: grid;
+    grid-template: 430px 430px / auto 40%;
+    grid-gap: 5px;
+    padding: 5px;
+    background-color: #eaeaea;
+  }
+
+  .module {
+    position: relative;
+    background: white;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-radius: 5px;
+
+    -webkit-box-shadow: 0px 0px 10px 1px rgba(199, 199, 199, 0.9);
+    -moz-box-shadow: 0px 0px 10px 1px rgba(199, 199, 199, 0.9);
+    box-shadow: 0px 0px 10px 1px rgba(199, 199, 199, 0.9);
+  }
+
+  .range-value {
+    position: relative;
+    top: -100%;
+  }
+
+  .range-value span {
+    width: 50px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    background: #007bff;
+    color: #fff;
+    font-size: 12px;
+    display: block;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -120%);
+    border-radius: 6px;
+  }
+
+  .range-value span:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 10px solid #007bff;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    margin-top: -1px;
+  }
+
+
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 25px;
+    background: rgb(252, 252, 252);
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border-radius: 5px;
+
+    -webkit-box-shadow: 0px 0px 10px 3px rgba(199, 199, 199, 0.9);
+    -moz-box-shadow: 0px 0px 10px 3px rgba(199, 199, 199, 0.9);
+    box-shadow: 0px 0px 10px 3px rgba(199, 199, 199, 0.9);
+  }
+
+  .slider:hover {
+    opacity: 1;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #3a3a3a;
+    cursor: pointer;
+  }
+
+  .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #3a3a3a;
+    cursor: pointer;
+  }
+
+  .sliderticks {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .sliderticks p {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 1px;
+    background: #D3D3D3;
+    height: 10px;
+    line-height: 40px;
+    margin: 0 0 20px 0;
+  }
+
+  .sidebar {
+    /* 100% Full-height */
+    width: 0;
+    /* 0 width - change this with JavaScript */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Stay on top */
+    top: 0;
+    right: 0;
+    background-color: #cccccc;
+    /* Black*/
+    overflow-x: hidden;
+    overflow-y: hidden;
+    /* Disable horizontal scroll */
+    padding-top: 20px;
+    /* Place content 60px from the top */
+    /* transition: 0.5s; */
+    /* 0.5 second transition effect to slide in the sidebar */
+    display: block;
+    margin-top: 5px;
+  }
+
+
+  /* Position and style the close button (top right corner) */
+  .closebtn {
+    position: absolute;
+    top: -5px;
+    right: 20px;
+    font-size: 36px;
+    color: black;
+  }
+
+  @media screen and (max-height: 450px) {
+    .sidebar {
+      padding-top: 15px;
+    }
+
+    .sidebar a {
+      font-size: 18px;
+    }
+  }
+
+  div.tooltip {
+    position: absolute;
+    text-align: center;
+    /* width: 80px; */
+    /* height: 28px; */
+    padding: 5px;
+    background: white;
+    border: 0px;
+    border-radius: 5px;
+    pointer-events: none;
+  }
+
+  .radio-inline {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  /* Style buttons */
+  .button {
+    background-color: white;
+    /* Blue background */
+    border: none;
+    /* Remove borders */
+    color: blue;
+    /* White text */
+    padding: 6px 8px;
+    /* Some padding */
+    font-size: 16px;
+    /* Set a font size */
+    cursor: pointer;
+    /* Mouse pointer on hover */
+    border-radius: 7px;
+    border: 1.5px solid #eaeaea;
+  }
+
+  .femaleButton.active {
+    border: 1.5px solid #e41a1c;
+  }
+
+  .maleButton.active {
+    border: 1.5px solid #377eb8;
+  }
+
+  .button:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .button * {
+    pointer-events: none;
+  }
+
+  /* The switch - the box around the slider */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 58px;
+    height: 30px;
+    bottom: 0;
+    background-color: #F2F3F7;
+    border-radius: 34px;
+    -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /* The slider */
+  .sliderSwitch {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #F2F3F7;
+    -webkit-transition: .4s;
+    transition: .4s;
+
+  }
+
+  .sliderSwitch:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    background-color: #F2F3F7;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input+.sliderSwitch+.sliderSwitch {
+    opacity: 0;
+
+  }
+
+  input:checked+.sliderSwitch,
+  input:checked+.sliderSwitch+.sliderSwitch {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+
+  }
+
+  input:checked+.sliderSwitch,
+  input:checked+.sliderSwitch+.sliderSwitch {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  input:checked+.sliderSwitch {
+    opacity: 0;
+  }
+
+  input:checked+.sliderSwitch+.sliderSwitch {
+    opacity: 1;
+  }
+
+  .popup {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: white;
+    border-radius: 5px;
+  }
+
+  .autocomplete {
+    position: relative;
+    display: inline-block;
+    width: 20%;
+  }
+
+  input {
+    border: 1px solid transparent;
+    background-color: #eaeaea;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 30px;
+    outline: none;
+    z-index: 99;
+  }
+
+  input[type=text] {
+    background-color: #eaeaea;
+    width: 100%;
+  }
+
+
+  input[type=submit] {
+    background-color: #eaeaea;
+    cursor: pointer;
+  }
+
+  .autocomplete-items {
+    position: absolute;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  .autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+  }
+
+  /*when hovering an item:*/
+  .autocomplete-items div:hover {
+    background-color: #eaeaea;
+  }
+
+  /*when navigating through the items using the arrow keys:*/
+  .autocomplete-active {
+    background-color: #eaeaea !important;
+  }
+
+  .selectedMale {
+    outline: 5px solid #f4c20d;
+  }
+
+  .selectedFemale {
+    outline: 5px solid #f4c20d;
+  }
+
+  .nonSelected {
+    outline: none;
+  }
