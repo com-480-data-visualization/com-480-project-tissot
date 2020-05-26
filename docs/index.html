@@ -38,12 +38,13 @@
         <div class="module" id="wrapper-gender-representation">
           <svg class="plot-overlay" width="98%" height="98%"></svg>
           <div style="position: relative; bottom:27px; left:10px;  padding-top: 3px; ">
-            <label class="switch">
+            <label class="switch tooltipContainer">
               <input type="checkbox" id="scatterCheckbox">
               <img class="sliderSwitch" src="actor.png"
                 style="position: absolute; height:26px; border-radius: 50%; top: 2px; left: 2px">
               <img class="sliderSwitch" src="director.png"
                 style="position: absolute; height:26px; border-radius: 50%; top: 2px; left: 2px;">
+                <span class="tooltiptext" id="scatterTooltip">Colored by main star</span>
             </label>
 
           </div>
@@ -63,14 +64,22 @@
             </form>
 
             <div style="position: absolute; bottom:3px; left:3px;  padding-top: 3px; ">
-              <button onclick="networkButtonClick(this)" class="button femaleButton active"
-                id="femaleDirectorButton"><img src="female_director.png" style="width:20px;"></button>
-              <button onclick="networkButtonClick(this)" class="button femaleButton active" id="femaleActorButton"><img
-                  src="female_actor.png" style="width:20px;"></button>
-              <button onclick="networkButtonClick(this)" class="button maleButton active" id="maleDirectorButton"><img
-                  src="male_director.png" style="width:20px;"></button>
-              <button onclick="networkButtonClick(this)" class="button maleButton active" id="maleActorButton"><img
-                  src="male_actor.png" style="width:20px;"></button>
+              <button onclick="networkButtonClick(this)" class="button femaleButton active tooltipContainer"
+                id="femaleDirectorButton"><img src="female_director.png" style="width:20px;">
+                <span class="tooltiptext" style="left:13%;">Directresses</span>
+              </button>
+              <button onclick="networkButtonClick(this)" class="button femaleButton active tooltipContainer" id="femaleActorButton"><img
+                  src="female_actor.png" style="width:20px;">
+                  <span class="tooltiptext" style="left:38%;">Actresses</span>
+                </button>
+              <button onclick="networkButtonClick(this)" class="button maleButton active tooltipContainer" id="maleDirectorButton"><img
+                  src="male_director.png" style="width:20px;">
+                  <span class="tooltiptext" style="left:65%;">Directors</span>
+                </button>
+              <button onclick="networkButtonClick(this)" class="button maleButton active tooltipContainer" id="maleActorButton"><img
+                  src="male_actor.png" style="width:20px;">
+                  <span class="tooltiptext" style="left:88%;">Actors</span>
+                </button>
             </div>
             <div id="graphPopup" class="popup"></div>
           </div>
@@ -79,12 +88,13 @@
           <div class="module w-100" id="wrapper-categories">
             <svg width="98%" height="98%"></svg>
             <div style="position: relative; bottom:35px; left:10px;  padding-top: 3px; ">
-              <label class="switch">
+              <label class="switch tooltipContainer">
                 <input type="checkbox" id="barCheckbox">
                 <img class="sliderSwitch" src="actor.png"
                   style="position: absolute; height:26px; border-radius: 50%; top: 2px; left: 2px">
                 <img class="sliderSwitch" src="director.png"
                   style="position: absolute; height:26px; border-radius: 50%; top: 2px; left: 2px;">
+                  <span class="tooltiptext" id="barTooltip">Colored by main star</span>
               </label>
             </div>
             <div id="barPopup" class="popup"></div>

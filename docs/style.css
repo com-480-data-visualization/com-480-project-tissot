@@ -363,3 +363,26 @@
   .nonSelected {
     outline: none;
   }
+  
+  /* Tooltip text */
+  .tooltipContainer .tooltiptext {
+    visibility: hidden;
+    width: 100px;
+    background-color: white;
+    color: black;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    bottom: 120%;
+    left: 50%;
+    margin-left: -50px;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltipContainer:hover .tooltiptext {
+    visibility: visible;
+  }

@@ -98,7 +98,6 @@ function autocomplete(inp, arr) {
             if (currentFocus > -1) {
                 /*and simulate a click on the "active" item:*/
                 if (x) x[currentFocus].click();
-                selected_name = currentFocus
             }
         }
     });
@@ -1300,9 +1299,11 @@ whenDocumentLoaded(() => {
 
         scatterCheckbox.addEventListener('change', function () {
             if (this.checked) {
+                document.getElementById("scatterTooltip").innerHTML = "Colored by director"
                 scatter_plot.setColorSelector('director')
             }
             else {
+                document.getElementById("scatterTooltip").innerHTML = "Colored by main star"
                 scatter_plot.setColorSelector('actor')
             }
         })
@@ -1311,9 +1312,11 @@ whenDocumentLoaded(() => {
 
         barCheckbox.addEventListener('change', function () {
             if (this.checked) {
+                document.getElementById("barTooltip").innerHTML = "Colored by director"
                 bar_plot.setRole('director')
             }
             else {
+                document.getElementById("barTooltip").innerHTML = "Colored by main star"
                 bar_plot.setRole('actor')
             }
         })
