@@ -116,6 +116,25 @@ Our initial website can be accessed on this [link](https://com-480-data-visualiz
 
 **80% of the final grade**
 
+### Visualization
+
+You can access our visualization on the following link: https://com-480-data-visualization.github.io/com-480-project-tissot/
+
+In the visualization you can choose a year using the slider at the bottom. The dashboard will be updated with the data from that year. 
+
+On the visualization on the left you can see all the movies from the selected year. The x axis shows the movie budget, the y axis shows the movie revenue, the size of the circle shows the popularity and the color shows the gender of the main actor. Actors are shown in blue and actresses are shown in red. You can choose to color the circles by the gender of the director using the button at the bottom left. You can hover over a movie to see its name and click on it to see more details about the movie. In this view, clicking on the name of the main actor or director will highlight them in the network visualization on the right.
+
+On the visuazalition on the top right you can see a network of collaborations between actors and directors. Directors are shown with chair icons and actors are shown with user icons with little stars. Males are colored in blue and females in red. You can use the search bar on the top left to find and highlight specific a person. Using the buttons at the bottom left you can show or hide specific types of nodes. Hovering over a node will show the role and name of the person. Clicking on the node will show the detailed view for the person and highlight their movies on the left visualization.
+
+On the visualization on the bottom right you can see a stacked bar chart. Here, you can view the representation of male and female leading stars in different genres. Blue is used for males and red for females. You can choose to see the representation of directors using the button on the bottom left. Hovering over a bar will show the exact percentage and clicking on it will show the 5 most popular movies in that category. Clicking on a movie poster in this view will highlight the movie on the left visualization, and double clicking will open the detailed view for that movie.
+
+### Project structure
+
+You can find the code and data for our website in the `docs` folder. The individual datasets used in the final visualizations can be found in the folder `docs/data`. The folder `docs/src` contains two javascript files: 
+
+- `index.js` - this file contains the implementation of our dashboard functionalitites.
+- `themoviedb.js` - this file contains the code from themoviedb.js library that can be found in this [repository](https://github.com/cavestri/themoviedb-javascript-library). We did some slight modifications of the library for our needs.
+
 ### Data
 
 The TMDB data is stored in 7 partitions, with two tables per partition:
@@ -125,5 +144,9 @@ The TMDB data is stored in 7 partitions, with two tables per partition:
 After filtering, we have close to 500k movies in our initial [dataset](https://drive.google.com/file/d/14Utozg-lNKqXqBYmJLLvXtf3YmTwSpJj/view?usp=sharing).
 However, many of them are for adults, so we created additional [table](https://drive.google.com/file/d/1zvoQmKK0Ryd4d-32ElqsvhjczchWF5b6/view?usp=sharing) that indicates this.
 After joining the last two tables and filtering out movies that are for adults, we are left with 100k movies in our final [dataset](https://drive.google.com/file/d/1OzaZ_Ad2-_lOwwGvOGwXJ7or9DOlm9NU/view?usp=sharing).
+
+Finally, we processed the final dataset to create the individual datasets used in our visualizations. This datasets can be found in the folder `docs/data`.
+
+
 
 
