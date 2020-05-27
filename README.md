@@ -116,9 +116,16 @@ Our initial website can be accessed on this [link](https://com-480-data-visualiz
 
 **80% of the final grade**
 
-### Visualization
+### Deliverables
 
-You can access our visualization on the following link: https://com-480-data-visualization.github.io/com-480-project-tissot/
+You can access our visualization [here](https://com-480-data-visualization.github.io/com-480-project-tissot/).
+
+You can watch our screencast [here](https://www.youtube.com/watch?v=6XnMwf_IjUo&t=4s).
+
+You can read our process book [here](https://github.com/com-480-data-visualization/com-480-project-tissot/blob/master/Gender%20in%20Movies%20-%20Process%20Book.pdf).
+
+
+### Visualization
 
 In the visualization you can choose a year using the slider at the bottom. The dashboard will be updated with the data from that year. 
 
@@ -130,22 +137,31 @@ On the visualization on the bottom right you can see a stacked bar chart. Here, 
 
 ### Project structure
 
-You can find the code and data for our website in the `docs` folder. The individual datasets used in the final visualizations can be found in the folder `docs/data`. The folder `docs/src` contains two javascript files: 
+You can find the code and data for our website in the `docs` folder. This folder contains the files `index.html` and `styles.css` used for creating and styling our web page. Additionally, it contains the font we use for the title and the icons we use in the visualizations. 
+
+The individual datasets used in the final visualizations can be found in the folder `docs/data`. 
+
+The folder `docs/src` contains two javascript files: 
 
 - `index.js` - this file contains the implementation of our dashboard functionalitites.
 - `themoviedb.js` - this file contains the code from themoviedb.js library that can be found in this [repository](https://github.com/cavestri/themoviedb-javascript-library). We did some slight modifications of the library for our needs.
 
+In the folder `notebooks` you can find two notebooks:
+
+- `Data Filtering.ipynb` - used for filtering the crawled data and creating the dataset of 100k movies.
+- `Final Datasets Generation.ipynb` - used for generating the individual datasets used in our visualizations.
+
 ### Data
 
-The TMDB data is stored in 7 partitions, with two tables per partition:
+The crawled TMDB data is stored in 7 partitions, with two tables per partition:
 - [Movies](https://drive.google.com/file/d/19OisQTXlxDY1RjKDj4kOe_j4Phu3HDdO/view?usp=sharing)
 - [Credits](https://drive.google.com/file/d/1tDah9EoY9FVZgaFtRKWk5zpdUP5Z_-ft/view?usp=sharing)
 
 After filtering, we have close to 500k movies in our initial [dataset](https://drive.google.com/file/d/14Utozg-lNKqXqBYmJLLvXtf3YmTwSpJj/view?usp=sharing).
 However, many of them are for adults, so we created additional [table](https://drive.google.com/file/d/1zvoQmKK0Ryd4d-32ElqsvhjczchWF5b6/view?usp=sharing) that indicates this.
-After joining the last two tables and filtering out movies that are for adults, we are left with 100k movies in our final [dataset](https://drive.google.com/file/d/1OzaZ_Ad2-_lOwwGvOGwXJ7or9DOlm9NU/view?usp=sharing).
+After joining the last two tables and filtering out movies that are for adults, we are left with 100k movies in our [dataset](https://drive.google.com/file/d/1OzaZ_Ad2-_lOwwGvOGwXJ7or9DOlm9NU/view?usp=sharing).
 
-Finally, we processed the final dataset to create the individual datasets used in our visualizations. This datasets can be found in the folder `docs/data`.
+Finally, we processed the dataset to create the individual datasets used in our visualizations. This datasets can be found in the folder `docs/data`.
 
 
 
