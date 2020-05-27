@@ -120,7 +120,7 @@ Our initial website can be accessed on this [link](https://com-480-data-visualiz
 
 You can access our visualization [here](https://com-480-data-visualization.github.io/com-480-project-tissot/).
 
-You can watch our screencast [here](https://www.youtube.com/watch?v=6XnMwf_IjUo&t=4s).
+You can watch our screencast [here](https://www.youtube.com/watch?v=6XnMwf_IjUo).
 
 You can read our process book [here](https://github.com/com-480-data-visualization/com-480-project-tissot/blob/master/Gender%20in%20Movies%20-%20Process%20Book.pdf).
 
