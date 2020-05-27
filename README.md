@@ -161,4 +161,4 @@ After filtering, we have close to 500k movies in our initial [dataset](https://d
 However, many of them are for adults, so we created additional [table](https://drive.google.com/file/d/1zvoQmKK0Ryd4d-32ElqsvhjczchWF5b6/view?usp=sharing) that indicates this.
 After joining the last two tables and filtering out movies that are for adults, we are left with 100k movies in our [dataset](https://drive.google.com/file/d/1OzaZ_Ad2-_lOwwGvOGwXJ7or9DOlm9NU/view?usp=sharing).
 
-Finally, we processed the dataset to create the individual datasets used in our visualizations. This datasets can be found in the folder `docs/data`.
+Finally, we processed the dataset to create the individual datasets used in our visualizations. These datasets can be found in the folder `docs/data`.
